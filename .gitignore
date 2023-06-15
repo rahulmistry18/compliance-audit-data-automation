@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Outputs (generated reports)
+outputs/*.csv
+outputs/*.json
+!outputs/.gitkeep
+
+# OS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
