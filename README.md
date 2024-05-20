@@ -4,6 +4,9 @@
 
 > Proof of concept developed at Rennes School of Business (Jun 2023). All data in this repo is **synthetic** and generated locally for demonstration purposes — no real client, trade, or mandate data is included.
 
+**[→ View the live results dashboard](https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/)**
+*(replace `YOUR-GITHUB-USERNAME` after you push — see [Publishing the dashboard](#publishing-the-dashboard) below)*
+
 ---
 
 ## What it does
@@ -67,6 +70,8 @@ compliance-audit-data-automation/
 │       ├── ledger_validator.py  # EMIR / MiFID II ledger checks
 │       └── mandate_validator.py # mandate termination checks
 ├── outputs/                     # generated reports (git-ignored contents)
+├── docs/
+│   └── index.html                # static results dashboard (GitHub Pages)
 └── tests/
     ├── test_ledger_validator.py
     ├── test_mandate_validator.py
@@ -92,6 +97,17 @@ pytest -v
 ```
 
 Running `src.main` prints a console summary and writes the audit trail + summary report to `outputs/`.
+
+## Publishing the dashboard
+
+`docs/index.html` is a self-contained, static results dashboard (no build step, no server) — it's the page a portfolio link should point to. To get a live URL:
+
+1. Push this repo to GitHub.
+2. In the repo, go to **Settings → Pages**.
+3. Under **Build and deployment**, set **Source** to `Deploy from a branch`, branch `main`, folder `/docs`, then **Save**.
+4. GitHub publishes it at `https://<your-username>.github.io/<repo-name>/` within a minute or two — that's the link to put on your portfolio.
+
+The dashboard currently displays the results from the bundled synthetic sample data. If you re-run the workflow on different data and want the dashboard to reflect it, update the `register` and `escalations` arrays near the bottom of `docs/index.html` with the new figures from `outputs/audit_summary.csv` and `outputs/audit_trail.csv`.
 
 ## Regulatory context (why these rules)
 
