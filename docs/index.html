@@ -3,239 +3,252 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compliance Audit Data Automation — Dashboard</title>
-<meta name="description" content="Live results dashboard for the Compliance Audit Data Automation PoC: agentic EMIR / MiFID II ledger and mandate validation with full audit traceability.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Compliance Audit Dashboard</title>
+<meta name="description" content="Results dashboard for the Compliance Audit Data Automation PoC: EMIR and MiFID II rule-based ledger and mandate validation.">
 <style>
   :root{
-    --bg:#10181F;
-    --panel:#17222B;
-    --panel-alt:#1D2A34;
-    --border:#2A3944;
-    --paper:#EFE7D3;
-    --ink:#EDE7D5;
-    --muted:#8A9AA5;
-    --brass:#C9A227;
-    --amber:#E8A33D;
-    --pass:#4C9A6A;
-    --pass-dim:#2E4A3A;
-    --fail:#C1473C;
-    --fail-dim:#4A2C29;
-    --mono:'IBM Plex Mono', ui-monospace, monospace;
-    --sans:'IBM Plex Sans', system-ui, sans-serif;
+    --canvas:#F3F2F1;
+    --card:#FFFFFF;
+    --border:#E1DFDD;
+    --text:#252423;
+    --text-sub:#605E5C;
+    --text-mute:#8A8886;
+    --accent:#118DFF;
+    --accent-dark:#0A5A9C;
+    --pass:#107C10;
+    --pass-bg:#DFF6DD;
+    --fail:#D83B01;
+    --fail-bg:#FDE7E9;
+    --gold:#D9B300;
+    --sans:"Segoe UI","Segoe UI Web",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
-  html{background:var(--bg);}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.55;
-    -webkit-font-smoothing:antialiased;
-  }
-  a{color:var(--amber);}
-  a:focus-visible, button:focus-visible, summary:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+  html,body{margin:0; background:var(--canvas); color:var(--text); font-family:var(--sans);}
+  body{font-size:14px; line-height:1.45;}
+  a{color:var(--accent-dark);}
 
-  .wrap{max-width:1040px; margin:0 auto; padding:2.5rem 1.5rem 4rem;}
+  .app{max-width:1180px; margin:0 auto; padding:0 0 2.5rem;}
 
-  /* ---------- header ---------- */
-  header{border-bottom:1px solid var(--border); padding-bottom:1.75rem; margin-bottom:2rem;}
-  .eyebrow{
-    font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
-    color:var(--brass); margin:0 0 .75rem;
+  /* ---------- top bar ---------- */
+  .topbar{
+    background:var(--card); border-bottom:1px solid var(--border);
+    padding:.9rem 1.5rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.75rem;
   }
-  h1{
-    font-family:var(--mono); font-weight:700; font-size:clamp(24px,4vw,34px);
-    letter-spacing:-.01em; margin:0 0 .75rem; color:var(--paper);
+  .topbar .title-block h1{font-size:18px; font-weight:600; margin:0 0 2px; color:var(--text);}
+  .topbar .title-block p{font-size:12px; color:var(--text-sub); margin:0;}
+  .topbar .meta{display:flex; align-items:center; gap:14px; font-size:12px; color:var(--text-mute);}
+  .refresh{display:inline-flex; align-items:center; gap:5px;}
+  .refresh .dot{width:7px; height:7px; border-radius:50%; background:var(--pass); display:inline-block;}
+  .btn{
+    font-family:var(--sans); font-size:12px; color:var(--text); background:var(--card);
+    border:1px solid var(--border); border-radius:2px; padding:5px 12px; cursor:pointer;
   }
-  .lede{max-width:640px; color:var(--muted); font-size:15px; margin:0 0 1.25rem;}
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 1.25rem;}
-  .tag{
-    font-family:var(--mono); font-size:11px; letter-spacing:.04em; text-transform:uppercase;
-    color:var(--muted); border:1px solid var(--border); border-radius:3px; padding:4px 9px;
-  }
-  .source-line{
-    font-family:var(--mono); font-size:12px; color:var(--muted); display:flex; align-items:center; gap:8px; flex-wrap:wrap;
-  }
-  .dot{width:6px; height:6px; border-radius:50%; background:var(--pass); display:inline-block; flex:none;}
+  .btn:hover{background:#F8F7F6;}
+  .btn:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
 
-  /* ---------- KPI strip ---------- */
-  .kpi-grid{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin:0 0 2.5rem;
+  /* ---------- filter bar ---------- */
+  .filterbar{
+    background:var(--card); border-bottom:1px solid var(--border);
+    padding:.7rem 1.5rem; display:flex; align-items:center; gap:1.75rem; flex-wrap:wrap;
   }
-  .kpi{
-    background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:1.1rem 1.2rem;
-  }
-  .kpi .label{
-    font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 .5rem;
-  }
-  .kpi .value{font-family:var(--mono); font-weight:700; font-size:30px; color:var(--paper); line-height:1;}
-  .kpi .sub{font-family:var(--mono); font-size:12px; color:var(--muted); margin-top:.4rem;}
-  .kpi.pass .value{color:var(--pass);}
-  .kpi.fail .value{color:var(--fail);}
-
-  .stamp-card{
-    background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:1.1rem 1.2rem;
-    display:flex; align-items:center; gap:14px; position:relative; overflow:hidden;
-  }
-  .stamp{
-    flex:none; width:76px; height:76px; border-radius:50%;
-    border:3px solid var(--fail); position:relative;
-    display:flex; align-items:center; justify-content:center;
-    transform:rotate(-9deg);
-    color:var(--fail);
-  }
-  .stamp::before{
-    content:''; position:absolute; inset:5px; border:1px solid var(--fail); border-radius:50%; opacity:.6;
-  }
-  .stamp .n{font-family:var(--mono); font-weight:700; font-size:24px;}
-  .stamp-text .label{font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin:0 0 .3rem;}
-  .stamp-text .headline{font-family:var(--mono); font-weight:600; font-size:14px; color:var(--fail); letter-spacing:.03em;}
-
-  /* ---------- sections ---------- */
-  section{margin:0 0 2.75rem;}
-  h2{
-    font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase;
-    color:var(--brass); border-bottom:1px solid var(--border); padding-bottom:.6rem; margin:0 0 1.25rem;
-  }
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:1.25rem 1.4rem;}
-
-  .legend{display:flex; gap:18px; flex-wrap:wrap; margin:0 0 1rem; font-family:var(--mono); font-size:12px; color:var(--muted);}
-  .legend span.sw{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:6px; vertical-align:-1px;}
-
-  /* ---------- tables ---------- */
-  table{width:100%; border-collapse:collapse; font-size:13px;}
-  thead th{
-    text-align:left; font-family:var(--mono); font-size:11px; letter-spacing:.06em; text-transform:uppercase;
-    color:var(--muted); font-weight:500; padding:.5rem .6rem; border-bottom:1px solid var(--border);
-  }
-  tbody td{padding:.6rem .6rem; border-bottom:1px solid var(--panel-alt); vertical-align:top;}
-  tbody tr:last-child td{border-bottom:none;}
-  td.mono, th.mono{font-family:var(--mono);}
-  td.num{font-family:var(--mono); text-align:right; white-space:nowrap;}
+  .filter-group{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .filter-group .fl-label{font-size:11px; font-weight:600; color:var(--text-sub); text-transform:uppercase; letter-spacing:.03em; margin-right:2px;}
   .pill{
-    font-family:var(--mono); font-size:11px; padding:2px 8px; border-radius:3px; letter-spacing:.03em;
-    display:inline-block;
+    font-family:var(--sans); font-size:12px; color:var(--text-sub); background:var(--canvas);
+    border:1px solid var(--border); border-radius:14px; padding:4px 12px; cursor:pointer; transition:background .1s;
   }
-  .pill.pass{background:var(--pass-dim); color:var(--pass);}
-  .pill.fail{background:var(--fail-dim); color:var(--fail);}
-  .desc{color:var(--muted); font-size:12.5px;}
+  .pill:hover{background:#EBEAE9;}
+  .pill.active{background:var(--accent); border-color:var(--accent); color:#fff; font-weight:600;}
+  .pill:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
 
-  /* ---------- escalation ledger ---------- */
-  .esc-row{
-    display:grid; grid-template-columns:96px 110px 1fr; gap:14px; align-items:start;
-    padding:.7rem 0; border-bottom:1px solid var(--panel-alt);
+  /* ---------- content grid ---------- */
+  .content{padding:1.5rem;}
+  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:0 0 14px;}
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:2px;
+    box-shadow:0 1px 2px rgba(0,0,0,.05);
   }
-  .esc-row:last-child{border-bottom:none;}
-  .esc-row .rule{font-family:var(--mono); font-size:12px; color:var(--brass);}
-  .esc-row .entity{font-family:var(--mono); font-size:12px; color:var(--paper);}
-  .esc-row .msg{font-size:13px; color:var(--ink);}
-
-  @media (max-width:600px){
-    .esc-row{grid-template-columns:1fr; gap:4px;}
-    .stamp-card{flex-direction:column; align-items:flex-start; text-align:left;}
+  .card-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:.6rem .9rem; border-bottom:1px solid var(--border);
   }
+  .card-head h2{font-size:13px; font-weight:600; margin:0; color:var(--text);}
+  .card-head .dots{color:var(--text-mute); font-size:14px; letter-spacing:2px;}
 
-  /* ---------- footer ---------- */
-  footer{border-top:1px solid var(--border); padding-top:1.5rem; display:flex; justify-content:space-between; gap:1rem; flex-wrap:wrap;}
-  footer .stack{font-family:var(--mono); font-size:11px; color:var(--muted);}
-  footer a{font-family:var(--mono); font-size:12px;}
+  .kpi-card{padding:1rem 1.1rem;}
+  .kpi-card .kl{font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-sub); margin:0 0 6px; font-weight:600;}
+  .kpi-card .kv{font-size:30px; font-weight:600; color:var(--text); line-height:1; font-variant-numeric:tabular-nums;}
+  .kpi-card .ks{font-size:11.5px; color:var(--text-mute); margin-top:6px;}
+  .kpi-card.pass .kv{color:var(--pass);}
+  .kpi-card.fail .kv{color:var(--fail);}
+  .kpi-card.warn .kv{color:var(--fail);}
 
-  @media (prefers-reduced-motion:no-preference){
-    .wrap{animation:fade .5s ease-out;}
-    @keyframes fade{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;}}
+  .grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:14px; margin:0 0 14px;}
+  .chart-body{padding:1rem;}
+
+  .legend-row{display:flex; gap:16px; padding:.6rem .9rem 0; font-size:12px; color:var(--text-sub);}
+  .legend-row .sw{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px;}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  thead th{
+    text-align:left; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.02em;
+    color:var(--text-sub); background:#FAF9F8; padding:.55rem .8rem; border-bottom:1px solid var(--border);
+  }
+  tbody td{padding:.55rem .8rem; border-bottom:1px solid #F1F0EF; color:var(--text);}
+  tbody tr:hover{background:#FAF9F8;}
+  tbody tr.filtered-out{display:none;}
+  td.num{text-align:right; font-variant-numeric:tabular-nums;}
+  td.mono{font-family:Consolas,"SFMono-Regular",Menlo,monospace; font-size:12px;}
+  .badge{
+    display:inline-block; font-size:11px; font-weight:600; padding:2px 9px; border-radius:10px;
+  }
+  .badge.pass{background:var(--pass-bg); color:var(--pass);}
+  .badge.fail{background:var(--fail-bg); color:var(--fail);}
+  .badge.zero{background:#F1F0EF; color:var(--text-mute);}
+
+  .empty-state{padding:1.2rem; text-align:center; color:var(--text-mute); font-size:12.5px; display:none;}
+
+  footer{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    padding:.8rem 1.5rem 0; font-size:11.5px; color:var(--text-mute);
+  }
+  .page-tabs{display:flex; gap:2px;}
+  .page-tab{
+    font-size:12px; padding:6px 14px; border:1px solid var(--border); border-bottom:none;
+    background:#EDEBE9; color:var(--text-sub); border-radius:3px 3px 0 0;
+  }
+  .page-tab.active{background:var(--card); color:var(--text); font-weight:600; border-color:var(--border);}
+
+  @media (max-width:900px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+  }
+  @media (max-width:560px){
+    .kpi-row{grid-template-columns:1fr;}
+    .topbar, .filterbar{padding:.8rem 1rem;}
+    .content{padding:1rem;}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <header>
-    <p class="eyebrow">Rennes School of Business · Jun 2023 · Proof of concept</p>
-    <h1>Compliance Audit Data Automation</h1>
-    <p class="lede">Agentic Python workflow for automated ledger validation and audit quality checks. Rule-based governance supporting EMIR and MiFID II compliance frameworks, with every finding traced back to its source rule and record.</p>
-    <div class="tags">
-      <span class="tag">Python</span>
-      <span class="tag">Pandas</span>
-      <span class="tag">NumPy</span>
-      <span class="tag">Alteryx</span>
-      <span class="tag">EMIR</span>
-      <span class="tag">MiFID II</span>
+  <div class="topbar">
+    <div class="title-block">
+      <h1>Compliance Audit Dashboard</h1>
+      <p>EMIR &amp; MiFID II rule-based ledger and mandate validation &middot; Compliance Audit Data Automation PoC</p>
     </div>
-    <p class="source-line"><span class="dot" aria-hidden="true"></span>Results below from a synthetic sample dataset · full source and audit trail on <a href="https://github.com/">GitHub</a></p>
-  </header>
+    <div class="meta">
+      <span class="refresh"><span class="dot" aria-hidden="true"></span>Data as of Jun 2023 (synthetic)</span>
+      <button class="btn" id="resetBtn" type="button">Reset filters</button>
+    </div>
+  </div>
 
-  <section class="kpi-grid" aria-label="Summary metrics">
-    <div class="kpi">
-      <p class="label">Rule evaluations</p>
-      <p class="value">166</p>
-      <p class="sub">across 26 ledger entries + 12 mandates</p>
+  <div class="filterbar">
+    <div class="filter-group">
+      <span class="fl-label">Domain</span>
+      <button class="pill active" data-filter-domain="All" type="button">All</button>
+      <button class="pill" data-filter-domain="EMIR" type="button">EMIR</button>
+      <button class="pill" data-filter-domain="MiFID II" type="button">MiFID II</button>
+      <button class="pill" data-filter-domain="Governance" type="button">Governance</button>
+      <button class="pill" data-filter-domain="Bookkeeping" type="button">Bookkeeping</button>
     </div>
-    <div class="kpi pass">
-      <p class="label">Passed</p>
-      <p class="value">150</p>
-      <p class="sub">90% pass rate</p>
+    <div class="filter-group">
+      <span class="fl-label">Status</span>
+      <button class="pill active" data-filter-status="All" type="button">All</button>
+      <button class="pill" data-filter-status="Fail" type="button">Failed only</button>
     </div>
-    <div class="kpi fail">
-      <p class="label">Failed</p>
-      <p class="value">16</p>
-      <p class="sub">across 8 rule types</p>
-    </div>
-    <div class="stamp-card">
-      <div class="stamp"><span class="n">13</span></div>
-      <div class="stamp-text">
-        <p class="label">High severity</p>
-        <p class="headline">Flagged for review</p>
+  </div>
+
+  <div class="content">
+
+    <div class="kpi-row">
+      <div class="card kpi-card">
+        <p class="kl">Rule evaluations</p>
+        <p class="kv" id="kpiTotal">166</p>
+        <p class="ks" id="kpiTotalSub">26 ledger entries &middot; 12 mandates</p>
+      </div>
+      <div class="card kpi-card pass">
+        <p class="kl">Pass rate</p>
+        <p class="kv" id="kpiPassRate">90%</p>
+        <p class="ks" id="kpiPassSub">150 passed</p>
+      </div>
+      <div class="card kpi-card fail">
+        <p class="kl">Failed checks</p>
+        <p class="kv" id="kpiFail">16</p>
+        <p class="ks" id="kpiFailSub">across 8 rules</p>
+      </div>
+      <div class="card kpi-card warn">
+        <p class="kl">High severity</p>
+        <p class="kv" id="kpiEsc">13</p>
+        <p class="ks">flagged for review</p>
       </div>
     </div>
-  </section>
 
-  <section aria-labelledby="domain-heading">
-    <h2 id="domain-heading">Findings by regulatory domain</h2>
-    <div class="panel">
-      <div class="legend">
-        <span><span class="sw" style="background:var(--pass);"></span>Passed</span>
-        <span><span class="sw" style="background:var(--fail);"></span>Failed</span>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-head"><h2>Findings by domain</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+        <div class="legend-row">
+          <span><span class="sw" style="background:var(--pass);"></span>Passed</span>
+          <span><span class="sw" style="background:var(--fail);"></span>Failed</span>
+        </div>
+        <div class="chart-body">
+          <div style="position:relative; height:230px;">
+            <canvas id="domainChart" role="img" aria-label="Stacked bar chart of pass and fail counts by domain. Bookkeeping: 49 passed, 3 failed. EMIR: 23 passed, 3 failed. Governance: 30 passed, 6 failed. MiFID II: 48 passed, 4 failed.">
+              Bookkeeping 49 pass / 3 fail. EMIR 23 pass / 3 fail. Governance 30 pass / 6 fail. MiFID II 48 pass / 4 fail.
+            </canvas>
+          </div>
+        </div>
       </div>
-      <div style="position:relative; height:260px;">
-        <canvas id="domainChart" role="img" aria-label="Stacked bar chart of pass and fail counts by domain. Bookkeeping: 49 passed, 3 failed. EMIR: 23 passed, 3 failed. Governance: 30 passed, 6 failed. MiFID II: 48 passed, 4 failed.">
-          Bookkeeping 49 pass / 3 fail. EMIR 23 pass / 3 fail. Governance 30 pass / 6 fail. MiFID II 48 pass / 4 fail.
-        </canvas>
+
+      <div class="card">
+        <div class="card-head"><h2>Pass / fail split</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+        <div class="chart-body">
+          <div style="position:relative; height:230px;">
+            <canvas id="splitChart" role="img" aria-label="Donut chart showing 150 passed checks and 16 failed checks out of 166 total.">
+              150 passed, 16 failed, out of 166 total rule evaluations.
+            </canvas>
+          </div>
+        </div>
       </div>
     </div>
-  </section>
 
-  <section aria-labelledby="register-heading">
-    <h2 id="register-heading">Rule register</h2>
-    <div class="panel" style="overflow-x:auto;">
-      <table>
-        <thead>
-          <tr>
-            <th class="mono">Rule ID</th>
-            <th>Domain</th>
-            <th>Checks</th>
-            <th class="num">Total</th>
-            <th class="num">Passed</th>
-            <th class="num">Failed</th>
-            <th class="num">Escalated</th>
-          </tr>
-        </thead>
-        <tbody id="registerBody"></tbody>
-      </table>
+    <div class="card" style="margin-bottom:14px;">
+      <div class="card-head"><h2>Rule register</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Rule ID</th><th>Domain</th><th>Checks</th>
+              <th class="num">Total</th><th class="num">Passed</th><th class="num">Failed</th><th class="num">Escalated</th>
+            </tr>
+          </thead>
+          <tbody id="registerBody"></tbody>
+        </table>
+        <p class="empty-state" id="registerEmpty">No rules match the current filters.</p>
+      </div>
     </div>
-  </section>
 
-  <section aria-labelledby="esc-heading">
-    <h2 id="esc-heading">Escalated findings</h2>
-    <div class="panel" id="escList"></div>
-  </section>
+    <div class="card">
+      <div class="card-head"><h2>Escalated findings &mdash; high severity</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead>
+            <tr><th>Rule ID</th><th>Domain</th><th>Entity</th><th>Finding</th></tr>
+          </thead>
+          <tbody id="escBody"></tbody>
+        </table>
+        <p class="empty-state" id="escEmpty">No escalations match the current filters.</p>
+      </div>
+    </div>
+
+  </div>
 
   <footer>
-    <p class="stack">Python · Pandas · NumPy · pytest — see the <a href="https://github.com/">rule source</a> for every check above.</p>
-    <a href="https://github.com/">View repository ↗</a>
+    <div class="page-tabs">
+      <span class="page-tab active">Overview</span>
+    </div>
+    <span>Python &middot; Pandas &middot; NumPy &middot; pytest &middot; <a href="https://github.com/">source on GitHub</a></span>
   </footer>
 
 </div>
@@ -254,62 +267,146 @@
   ];
 
   var escalations = [
-    {rule:"EMIR-001", entity:"TXN-1005", msg:"Reported 3 day(s) after the T+1 EMIR deadline."},
-    {rule:"LEDGER-002", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger."},
-    {rule:"LEDGER-003", entity:"TXN-1009", msg:"counterparty_lei missing or not 20 characters."},
-    {rule:"MIFID-001", entity:"TXN-1012", msg:"Missing required MiFID II field(s): instrument_id."},
-    {rule:"EMIR-001", entity:"TXN-1014", msg:"Reported 2 day(s) after the T+1 EMIR deadline."},
-    {rule:"MIFID-001", entity:"TXN-1017", msg:"Missing required MiFID II field(s): venue."},
-    {rule:"MIFID-001", entity:"TXN-1020", msg:"Missing required MiFID II field(s): price."},
-    {rule:"EMIR-001", entity:"TXN-1022", msg:"Reported 1 day(s) after the T+1 EMIR deadline."},
-    {rule:"LEDGER-002", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger. (second occurrence)"},
-    {rule:"MANDATE-001", entity:"MND-204", msg:"termination_date is earlier than start_date."},
-    {rule:"MANDATE-001", entity:"MND-208", msg:"termination_date is earlier than start_date."},
-    {rule:"MANDATE-003", entity:"MND-208", msg:"Status is ACTIVE but termination_date has already passed."},
-    {rule:"MANDATE-003", entity:"MND-211", msg:"Status is TERMINATED but no termination_date is recorded."}
+    {rule:"EMIR-001", domain:"EMIR", entity:"TXN-1005", msg:"Reported 3 day(s) after the T+1 EMIR deadline."},
+    {rule:"LEDGER-002", domain:"Bookkeeping", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger."},
+    {rule:"LEDGER-003", domain:"MiFID II", entity:"TXN-1009", msg:"counterparty_lei missing or not 20 characters."},
+    {rule:"MIFID-001", domain:"MiFID II", entity:"TXN-1012", msg:"Missing required MiFID II field(s): instrument_id."},
+    {rule:"EMIR-001", domain:"EMIR", entity:"TXN-1014", msg:"Reported 2 day(s) after the T+1 EMIR deadline."},
+    {rule:"MIFID-001", domain:"MiFID II", entity:"TXN-1017", msg:"Missing required MiFID II field(s): venue."},
+    {rule:"MIFID-001", domain:"MiFID II", entity:"TXN-1020", msg:"Missing required MiFID II field(s): price."},
+    {rule:"EMIR-001", domain:"EMIR", entity:"TXN-1022", msg:"Reported 1 day(s) after the T+1 EMIR deadline."},
+    {rule:"LEDGER-002", domain:"Bookkeeping", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger. (second occurrence)"},
+    {rule:"MANDATE-001", domain:"Governance", entity:"MND-204", msg:"termination_date is earlier than start_date."},
+    {rule:"MANDATE-001", domain:"Governance", entity:"MND-208", msg:"termination_date is earlier than start_date."},
+    {rule:"MANDATE-003", domain:"Governance", entity:"MND-208", msg:"Status is ACTIVE but termination_date has already passed."},
+    {rule:"MANDATE-003", domain:"Governance", entity:"MND-211", msg:"Status is TERMINATED but no termination_date is recorded."}
   ];
 
-  var regBody = document.getElementById("registerBody");
-  register.forEach(function(r){
-    var tr = document.createElement("tr");
-    tr.innerHTML =
-      '<td class="mono">' + r.id + '</td>' +
-      '<td>' + r.domain + '</td>' +
-      '<td class="desc">' + r.desc + '</td>' +
-      '<td class="num">' + r.total + '</td>' +
-      '<td class="num">' + r.pass + '</td>' +
-      '<td class="num">' + r.fail + '</td>' +
-      '<td class="num">' + (r.esc ? '<span class="pill fail">' + r.esc + '</span>' : '<span class="pill pass">0</span>') + '</td>';
-    regBody.appendChild(tr);
+  var state = { domain: "All", status: "All" };
+
+  function renderRegister(){
+    var body = document.getElementById("registerBody");
+    body.innerHTML = "";
+    var visibleCount = 0;
+    register.forEach(function(r){
+      var domainMatch = state.domain === "All" || r.domain === state.domain;
+      var statusMatch = state.status === "All" || (state.status === "Fail" && r.fail > 0);
+      var visible = domainMatch && statusMatch;
+      if (visible) visibleCount++;
+      var tr = document.createElement("tr");
+      if (!visible) tr.className = "filtered-out";
+      tr.innerHTML =
+        '<td class="mono">' + r.id + '</td>' +
+        '<td>' + r.domain + '</td>' +
+        '<td>' + r.desc + '</td>' +
+        '<td class="num">' + r.total + '</td>' +
+        '<td class="num">' + r.pass + '</td>' +
+        '<td class="num">' + r.fail + '</td>' +
+        '<td class="num">' + (r.esc ? '<span class="badge fail">' + r.esc + '</span>' : '<span class="badge zero">0</span>') + '</td>';
+      body.appendChild(tr);
+    });
+    document.getElementById("registerEmpty").style.display = visibleCount ? "none" : "block";
+  }
+
+  function renderEscalations(){
+    var body = document.getElementById("escBody");
+    body.innerHTML = "";
+    var visibleCount = 0;
+    escalations.forEach(function(e){
+      var domainMatch = state.domain === "All" || e.domain === state.domain;
+      if (domainMatch) visibleCount++;
+      var tr = document.createElement("tr");
+      if (!domainMatch) tr.className = "filtered-out";
+      tr.innerHTML =
+        '<td class="mono">' + e.rule + '</td>' +
+        '<td>' + e.domain + '</td>' +
+        '<td class="mono">' + e.entity + '</td>' +
+        '<td>' + e.msg + '</td>';
+      body.appendChild(tr);
+    });
+    document.getElementById("escEmpty").style.display = visibleCount ? "none" : "block";
+  }
+
+  function renderKpis(){
+    var rows = register.filter(function(r){ return state.domain === "All" || r.domain === state.domain; });
+    var total = rows.reduce(function(a,r){ return a + r.total; }, 0);
+    var pass = rows.reduce(function(a,r){ return a + r.pass; }, 0);
+    var fail = rows.reduce(function(a,r){ return a + r.fail; }, 0);
+    var esc = rows.reduce(function(a,r){ return a + r.esc; }, 0);
+    var rate = total ? Math.round((pass/total)*100) : 0;
+    document.getElementById("kpiTotal").textContent = total;
+    document.getElementById("kpiTotalSub").textContent = state.domain === "All" ? "26 ledger entries \u00b7 12 mandates" : rows.length + " rule(s) in " + state.domain;
+    document.getElementById("kpiPassRate").textContent = rate + "%";
+    document.getElementById("kpiPassSub").textContent = pass + " passed";
+    document.getElementById("kpiFail").textContent = fail;
+    document.getElementById("kpiFailSub").textContent = "across " + rows.filter(function(r){return r.fail>0;}).length + " rules";
+    document.getElementById("kpiEsc").textContent = esc;
+  }
+
+  function applyFilters(){
+    renderKpis();
+    renderRegister();
+    renderEscalations();
+  }
+
+  document.querySelectorAll("[data-filter-domain]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll("[data-filter-domain]").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      state.domain = btn.getAttribute("data-filter-domain");
+      applyFilters();
+    });
   });
 
-  var escList = document.getElementById("escList");
-  escalations.forEach(function(e){
-    var row = document.createElement("div");
-    row.className = "esc-row";
-    row.innerHTML =
-      '<div class="rule">' + e.rule + '</div>' +
-      '<div class="entity">' + e.entity + '</div>' +
-      '<div class="msg">' + e.msg + '</div>';
-    escList.appendChild(row);
+  document.querySelectorAll("[data-filter-status]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      document.querySelectorAll("[data-filter-status]").forEach(function(b){ b.classList.remove("active"); });
+      btn.classList.add("active");
+      state.status = btn.getAttribute("data-filter-status");
+      applyFilters();
+    });
   });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    state = { domain: "All", status: "All" };
+    document.querySelectorAll("[data-filter-domain]").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-filter-domain") === "All"); });
+    document.querySelectorAll("[data-filter-status]").forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-filter-status") === "All"); });
+    applyFilters();
+  });
+
+  renderRegister();
+  renderEscalations();
 
   new Chart(document.getElementById("domainChart"), {
     type: "bar",
     data: {
       labels: ["Bookkeeping", "EMIR", "Governance", "MiFID II"],
       datasets: [
-        { label: "Passed", data: [49, 23, 30, 48], backgroundColor: "#4C9A6A", borderRadius: 3, maxBarThickness: 40 },
-        { label: "Failed", data: [3, 3, 6, 4], backgroundColor: "#C1473C", borderRadius: 3, maxBarThickness: 40 }
+        { label: "Passed", data: [49, 23, 30, 48], backgroundColor: "#107C10", borderRadius: 2, maxBarThickness: 44 },
+        { label: "Failed", data: [3, 3, 6, 4], backgroundColor: "#D83B01", borderRadius: 2, maxBarThickness: 44 }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { stacked: true, ticks: { color: "#8A9AA5", font: { family: "IBM Plex Mono", size: 11 } }, grid: { display: false } },
-        y: { stacked: true, ticks: { color: "#8A9AA5", font: { family: "IBM Plex Mono", size: 11 } }, grid: { color: "#2A3944" } }
+        x: { stacked: true, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11.5 } }, grid: { display: false } },
+        y: { stacked: true, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11.5 } }, grid: { color: "#E1DFDD" } }
       },
+      plugins: { legend: { display: false } }
+    }
+  });
+
+  new Chart(document.getElementById("splitChart"), {
+    type: "doughnut",
+    data: {
+      labels: ["Passed", "Failed"],
+      datasets: [{ data: [150, 16], backgroundColor: ["#107C10", "#D83B01"], borderColor: "#FFFFFF", borderWidth: 2 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "68%",
       plugins: { legend: { display: false } }
     }
   });
