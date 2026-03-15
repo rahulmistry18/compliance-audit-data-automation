@@ -8,6 +8,7 @@ import pandas as pd
 
 LEDGER_SCHEMA = [
     "transaction_id",
+    "jurisdiction",
     "trade_date",
     "reporting_timestamp",
     "counterparty_lei",

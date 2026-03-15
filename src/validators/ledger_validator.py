@@ -1,10 +1,24 @@
 """
 LedgerValidatorAgent
 
-A small "agent" in the sense that it autonomously runs its full battery of
-rules over every ledger row and decides pass/fail/severity per rule per row,
-without any per-row orchestration from the caller. It just needs a DataFrame
-and returns a flat list of RuleResult objects ready for the audit trail.
+Each rule below runs autonomously over every ledger row and returns a
+RuleResult, without any per-row orchestration from the caller — that's the
+"agentic" part: hand it a DataFrame, get back a fully traced set of findings.
+
+Two rules are jurisdiction-aware (ReportingDeadlineRule, CDECompletenessRule)
+because trade reporting is genuinely different by region:
+
+  EU    — EMIR REFIT / MiFID II RTS 22, reported to ESMA-regulated trade
+           repositories, deadline T+1.
+  US    — Dodd-Frank Title VII, split between the CFTC (swaps) and SEC
+           (security-based swaps under Reg SBSR), reporting required "as
+           soon as technologically practicable" — modelled here as same-day.
+  APAC  — Australia's ASIC 2024 Rules, Hong Kong's SFC/HKMA regime, and
+           Singapore's MAS rules, which all moved to a harmonised T+2 in
+           their 2024–2025 rewrites.
+
+See config.py and the README's "Global regulatory landscape" section for
+the reasoning and sources behind these numbers.
 """
 
 import numpy as np
@@ -53,8 +67,12 @@ class DuplicateTransactionRule(Rule):
 
 
 class CounterpartyLEIRule(Rule):
+    """
+    LEI (ISO 17442) is the one identifier every jurisdiction modelled here
+    already agrees on, so this rule doesn't need to branch by jurisdiction.
+    """
     rule_id = "LEDGER-003"
-    domain = "MiFID II"
+    domain = "Counterparty Identification (Global — ISO 17442)"
     entity_type = "ledger_entry"
 
     def evaluate(self, row: dict) -> RuleResult:
@@ -67,39 +85,66 @@ class CounterpartyLEIRule(Rule):
         return self._pass(row["transaction_id"])
 
 
-class EMIRReportingDeadlineRule(Rule):
-    rule_id = "EMIR-001"
-    domain = "EMIR"
+class ReportingDeadlineRule(Rule):
+    """
+    Generalised trade-reporting deadline check. The deadline and the
+    regulatory label applied both depend on the row's `jurisdiction` field —
+    this is what makes the rule genuinely cross-border rather than EU-only.
+    """
+    rule_id = "REPORT-001"
+    domain = "Trade Reporting Deadline"
     entity_type = "ledger_entry"
 
     def evaluate(self, row: dict) -> RuleResult:
+        jurisdiction = row.get("jurisdiction")
         trade_date = row.get("trade_date")
         reported_at = row.get("reporting_timestamp")
+        label = config.JURISDICTION_LABELS.get(jurisdiction, jurisdiction)
+
+        if jurisdiction not in config.REPORTING_DEADLINE_DAYS:
+            return self._fail(
+                row["transaction_id"], config.SEVERITY_MEDIUM,
+                f"Unrecognised jurisdiction '{jurisdiction}'; cannot determine reporting deadline.",
+                domain=label,
+            )
 
         if pd.isna(trade_date) or pd.isna(reported_at):
             return self._fail(
                 row["transaction_id"], config.SEVERITY_HIGH,
-                "Missing trade_date or reporting_timestamp for EMIR check."
+                "Missing trade_date or reporting_timestamp for reporting-deadline check.",
+                domain=label,
             )
 
-        deadline = trade_date + pd.Timedelta(days=config.EMIR_REPORTING_DEADLINE_DAYS)
+        deadline_days = config.REPORTING_DEADLINE_DAYS[jurisdiction]
+        deadline = trade_date + pd.Timedelta(days=deadline_days)
         if reported_at > deadline:
             days_late = (reported_at - deadline).days
             return self._fail(
                 row["transaction_id"], config.SEVERITY_HIGH,
-                f"Reported {days_late} day(s) after the T+{config.EMIR_REPORTING_DEADLINE_DAYS} EMIR deadline."
+                f"Reported {days_late} day(s) after the {jurisdiction} T+{deadline_days} deadline ({label}).",
+                domain=label,
             )
-        return self._pass(row["transaction_id"])
+        return self._pass(row["transaction_id"], domain=label)
 
 
-class MiFIDFieldCompletenessRule(Rule):
-    rule_id = "MIFID-001"
-    domain = "MiFID II"
+class CDECompletenessRule(Rule):
+    """
+    Checks the shared "Critical Data Elements" (CPMI-IOSCO) field set that
+    MiFID II RTS 22 (EU), CFTC Parts 43/45 (US), and the ASIC/HKMA-SFC/MAS
+    rewrites (APAC) have converged on. The required fields are the same
+    everywhere in this simplified PoC; the domain label still reflects the
+    row's jurisdiction so findings are traceable to the right regime.
+    """
+    rule_id = "CDE-001"
+    domain = "Critical Data Elements (CDE)"
     entity_type = "ledger_entry"
 
     def evaluate(self, row: dict) -> RuleResult:
+        jurisdiction = row.get("jurisdiction")
+        label = config.JURISDICTION_LABELS.get(jurisdiction, jurisdiction)
+
         missing = [
-            f for f in config.MIFID_II_REQUIRED_FIELDS
+            f for f in config.CDE_REQUIRED_FIELDS
             if row.get(f) is None or (isinstance(row.get(f), float) and np.isnan(row.get(f)))
             or (isinstance(row.get(f), str) and row.get(f).strip() == "")
             or pd.isna(row.get(f))
@@ -107,9 +152,10 @@ class MiFIDFieldCompletenessRule(Rule):
         if missing:
             return self._fail(
                 row["transaction_id"], config.SEVERITY_HIGH,
-                f"Missing required MiFID II field(s): {', '.join(missing)}."
+                f"Missing required Critical Data Element(s): {', '.join(missing)}.",
+                domain=label,
             )
-        return self._pass(row["transaction_id"])
+        return self._pass(row["transaction_id"], domain=label)
 
 
 class LedgerValidatorAgent:
@@ -124,8 +170,8 @@ class LedgerValidatorAgent:
             DebitCreditBalanceRule(),
             DuplicateTransactionRule(duplicate_ids),
             CounterpartyLEIRule(),
-            EMIRReportingDeadlineRule(),
-            MiFIDFieldCompletenessRule(),
+            ReportingDeadlineRule(),
+            CDECompletenessRule(),
         ]
 
     def run(self) -> list:

@@ -1,8 +1,8 @@
 # Compliance Audit Data Automation — PoC
 
-**Agentic Python workflow for automated ledger validation and audit quality checks**, bridging accounting and data analytics. Implements rule-based governance supporting **EMIR** and **MiFID II** compliance frameworks with full audit traceability.
+**Agentic Python workflow for automated ledger validation and audit quality checks**, bridging accounting and data analytics. Implements rule-based governance spanning **EU (EMIR / MiFID II), US (Dodd-Frank / CFTC / SEC), and Asia-Pacific (ASIC / HKMA-SFC / MAS)** trade-reporting frameworks, with full audit traceability.
 
-> Proof of concept developed at Rennes School of Business (Jun 2023). All data in this repo is **synthetic** and generated locally for demonstration purposes — no real client, trade, or mandate data is included.
+> Proof of concept developed at Rennes School of Business (Jun 2023), later extended to cover multiple jurisdictions. All data in this repo is **synthetic** and generated locally for demonstration purposes — no real client, trade, or mandate data is included.
 
 **[→ View the live results dashboard](https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/)**
 *(replace `YOUR-GITHUB-USERNAME` after you push — see [Publishing the dashboard](#publishing-the-dashboard) below)*
@@ -17,7 +17,7 @@ The pipeline runs a small team of independent **validator agents** over a genera
                 ┌───────────────────┐
  sample_ledger  │                   │      ┌──────────────────────┐
    .csv ───────▶│   Data Loader     │─────▶│  Ledger Validator     │──┐
-                │  (schema checks)  │      │  Agent (EMIR/MiFID II)│  │
+                │  (schema checks)  │      │  Agent (EU/US/APAC)   │  │
  sample_mandates│                   │      └──────────────────────┘  │
    .csv ───────▶│                   │─────▶┌──────────────────────┐  │   ┌───────────────┐
                 └───────────────────┘      │  Mandate Validator    │──┼──▶│  Audit Trail   │
@@ -36,10 +36,12 @@ The pipeline runs a small team of independent **validator agents** over a genera
 
 | Agent | Rule domain | Example checks |
 |---|---|---|
-| `LedgerValidatorAgent` | Bookkeeping integrity + regulatory reporting | Debit/credit balance per entry, duplicate transaction IDs, missing/invalid counterparty LEI, T+1 EMIR trade-reporting deadline breach, MiFID II mandatory field completeness (instrument ID, timestamp, venue, price) |
+| `LedgerValidatorAgent` | Bookkeeping integrity + multi-jurisdiction regulatory reporting | Debit/credit balance per entry, duplicate transaction IDs, missing/invalid counterparty LEI, **jurisdiction-aware trade-reporting deadline** (EU T+1 / US same-day / APAC T+2), **Critical Data Element (CDE)** field completeness (instrument ID, timestamp, venue, price) |
 | `MandateValidatorAgent` | Mandate lifecycle governance | Termination date logically after start date, minimum notice period respected, status field consistent with termination/effective dates, orphaned "active" mandates past their end date |
 
-Each rule returns a structured `RuleResult` (rule id, entity id, status, severity, message). The orchestrator (`src/main.py`) runs every agent, aggregates results, assigns an **escalation flag** to any `HIGH` severity failure, and writes:
+Each ledger entry carries a `jurisdiction` field (`EU` / `US` / `APAC`). The reporting-deadline and data-completeness rules read that field and apply the *actual* deadline and regulator label for that region — so the same rule engine produces an EMIR finding, a Dodd-Frank finding, or an ASIC finding depending on where the trade was booked, instead of hard-coding one regime.
+
+Each rule returns a structured `RuleResult` (rule id, entity id, status, severity, message, **domain — which includes the jurisdiction/regulator**). The orchestrator (`src/main.py`) runs every agent, aggregates results, assigns an **escalation flag** to any `HIGH` severity failure, and writes:
 
 - `outputs/audit_trail.csv` — one row per rule evaluation (full traceability)
 - `outputs/audit_trail.json` — same data, machine-readable
@@ -67,7 +69,7 @@ compliance-audit-data-automation/
 │   ├── main.py                  # orchestrator / entry point
 │   └── validators/
 │       ├── compliance_rules.py  # RuleResult dataclass, base Rule class
-│       ├── ledger_validator.py  # EMIR / MiFID II ledger checks
+│       ├── ledger_validator.py  # EU/US/APAC reporting + bookkeeping checks
 │       └── mandate_validator.py # mandate termination checks
 ├── outputs/                     # generated reports (git-ignored contents)
 ├── docs/
@@ -109,11 +111,41 @@ Running `src.main` prints a console summary and writes the audit trail + summary
 
 The dashboard currently displays the results from the bundled synthetic sample data. If you re-run the workflow on different data and want the dashboard to reflect it, update the `register` and `escalations` arrays near the bottom of `docs/index.html` with the new figures from `outputs/audit_summary.csv` and `outputs/audit_trail.csv`.
 
+## Understanding EMIR and MiFID II — in plain language
+
+Both rules come out of the same place: after the 2008 financial crisis, regulators realized nobody had a clear picture of how much risk was building up in derivatives markets, or whether trading was happening fairly and transparently. The EU's response was two regulations that do different jobs:
+
+**EMIR** *(European Market Infrastructure Regulation)* — **"Tell the regulator every derivative trade exists."**
+Think of it as a radar system. Every time a bank, fund, or company trades a derivative (a contract whose value depends on something else — an interest rate, a currency, a commodity), EMIR requires that trade to be reported to an approved trade repository, generally by the next business day. Regulators use this to see risk concentrations building up across the whole market — not just wait for a crisis to reveal them.
+
+**MiFID II** *(Markets in Financial Instruments Directive II)* — **"Trade fairly, transparently, and keep proper records — for almost everything, not just derivatives."**
+It's the EU's much broader rulebook for how financial markets operate: what must be disclosed about a trade (price, timing, venue, counterparty), best-execution obligations (firms must get clients a fair deal, not just a convenient one), and market transparency rules. This project checks a simplified slice of MiFID II's transaction-reporting requirement (RTS 22): a defined set of fields — instrument ID, timestamp, venue, price, counterparty LEI — must be complete and correct.
+
+**In one line:** EMIR = *"does the regulator know this derivative trade happened?"* MiFID II = *"was this trade conducted properly and is it fully documented?"*
+
+## Global regulatory landscape (2024–2026)
+
+Trade-reporting rules aren't EU-only — the US and Asia-Pacific run their own regimes, and all of them have been actively rewritten in the last two years. This project models that directly: each ledger entry carries a `jurisdiction` (`EU` / `US` / `APAC`), and the reporting-deadline rule applies the *correct* regime for that row.
+
+| Region | Regulator(s) | Framework | Reporting deadline | What's changed recently |
+|---|---|---|---|---|
+| **EU** | ESMA | EMIR (REFIT) + MiFID II / MiFIR | T+1 | EMIR REFIT's revised reporting standards took effect April 2024. EMIR 3.0's "Active Account Requirement" (reducing reliance on non-EU clearing houses) has been in force since December 2024, with technical standards entering force February 2026 and first compliance reports due July 2026. MiFID III / MiFIR II's transparency reforms — including a ban on payment-for-order-flow and a new EU consolidated tape — are phasing in through 2026–2027. |
+| **UK** | FCA / Bank of England | UK EMIR (separate regime since Brexit) | T+1 | UK EMIR Refit implementation completed March 2025; further reporting-field amendments took effect January 2026. |
+| **US** | CFTC (swaps) / SEC (security-based swaps) | Dodd-Frank Title VII — CFTC Parts 43/45, SEC Regulation SBSR | Same-day ("as soon as technologically practicable") | The SEC and CFTC — which have run separate, sometimes conflicting reporting regimes since Dodd-Frank split oversight between them — signed a Joint Harmonization Initiative MOU in March 2026 and opened a joint public comment period (June–August 2026) to align the two frameworks. |
+| **Australia** | ASIC | Derivative Transaction Rules 2024 | T+2 (was T+1) | The 2024 Rules pushed the deadline from T+1 out to T+2 specifically to align with the rest of Asia-Pacific; further scope changes affecting foreign firms took effect October 2025. |
+| **Hong Kong** | HKMA / SFC | OTC derivatives reporting regime | T+2 | Mandatory Unique Transaction Identifiers (UTI) and Unique Product Identifiers (UPI) from September 2025, standardizing the data fields reported ("Critical Data Elements") in line with the global standard below. |
+| **Singapore** | MAS | Securities and Futures Act derivatives reporting | T+2 | Rewritten to adopt the same global UTI/UPI/CDE data standard as Australia, Hong Kong, and Japan. |
+
+**The pattern worth noticing:** the deadlines differ (US wants near-real-time visibility into the world's largest derivatives market; EU sits at T+1; Asia-Pacific regulators deliberately relaxed to T+2 to ease implementation), but since 2024–2025 every one of these regimes has converged on the *same* underlying data standard — **Unique Transaction Identifiers (UTI)**, **Unique Product Identifiers (UPI)**, and **Critical Data Elements (CDE)** — set by the international standard-setters CPMI and IOSCO. That convergence is what `CDECompletenessRule` in this codebase reflects: the same five fields (instrument ID, timestamp, venue, price, LEI) are checked regardless of jurisdiction, because that's genuinely where global practice has landed.
+
+*Figures above are simplified for teaching purposes and reflect publicly available regulatory guidance as of mid-2026 (ESMA, the UK FCA/Bank of England, the US CFTC/SEC, ASIC, HKMA/SFC, and MAS). This is not legal advice — always check current primary regulatory text before relying on any deadline or field list operationally.*
+
 ## Regulatory context (why these rules)
 
-- **EMIR** (European Market Infrastructure Regulation) requires derivative trades to be reported to a trade repository, generally by **T+1**. `LedgerValidatorAgent` flags any ledger entry whose reporting timestamp falls outside that window.
-- **MiFID II** transaction reporting (RTS 22) requires a defined set of fields (instrument identifier, execution timestamp, venue, price, counterparty LEI) to be populated and internally consistent. Missing/invalid fields are flagged as `HIGH` severity.
-- **Mandate termination validation** reflects common internal-audit governance checks: a mandate cannot be terminated before it starts, termination must respect any contractual notice period, and status metadata must stay consistent with dates — inconsistencies here are a classic audit-quality finding.
+- **EMIR / MiFID II / Dodd-Frank / ASIC / HKMA-SFC / MAS** all require derivative trades to be reported to an approved repository within a set window. `ReportingDeadlineRule` reads each ledger entry's `jurisdiction` and flags any entry reported outside that region's deadline.
+- **Critical Data Elements (CDE)** — the shared field set (instrument identifier, execution timestamp, venue, price, counterparty LEI) that EU, US, and APAC reporting regimes have all converged on. Missing/invalid fields are flagged as `HIGH` severity by `CDECompletenessRule`.
+- **Legal Entity Identifiers (LEI)** — a single 20-character ISO 17442 code used identically to identify counterparties in every jurisdiction modelled here, checked by `CounterpartyLEIRule`.
+- **Mandate termination validation** reflects common internal-audit governance checks, independent of jurisdiction: a mandate cannot be terminated before it starts, termination must respect any contractual notice period, and status metadata must stay consistent with dates — inconsistencies here are a classic audit-quality finding.
 
 This is a simplified, educational rule set intended to demonstrate the automation pattern — it is **not** a certified regulatory compliance tool.
 

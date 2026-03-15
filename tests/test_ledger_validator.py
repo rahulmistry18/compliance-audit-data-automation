@@ -5,8 +5,8 @@ from src.validators.ledger_validator import (
     DebitCreditBalanceRule,
     DuplicateTransactionRule,
     CounterpartyLEIRule,
-    EMIRReportingDeadlineRule,
-    MiFIDFieldCompletenessRule,
+    ReportingDeadlineRule,
+    CDECompletenessRule,
     LedgerValidatorAgent,
 )
 
@@ -14,6 +14,7 @@ from src.validators.ledger_validator import (
 def base_row(**overrides):
     row = {
         "transaction_id": "TXN-1",
+        "jurisdiction": "EU",
         "trade_date": pd.Timestamp("2023-05-01"),
         "reporting_timestamp": pd.Timestamp("2023-05-02"),
         "counterparty_lei": "A" * 20,
@@ -64,16 +65,21 @@ def test_counterparty_lei_rule_missing():
     assert result.status == "FAIL"
 
 
-def test_emir_reporting_deadline_pass_within_t1():
-    result = EMIRReportingDeadlineRule().evaluate(base_row(
+# --- ReportingDeadlineRule: jurisdiction-aware --------------------------
+
+def test_reporting_deadline_eu_pass_within_t1():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="EU",
         trade_date=pd.Timestamp("2023-05-01"),
         reporting_timestamp=pd.Timestamp("2023-05-02"),
     ))
     assert result.status == "PASS"
+    assert "EU" in result.domain
 
 
-def test_emir_reporting_deadline_fail_late():
-    result = EMIRReportingDeadlineRule().evaluate(base_row(
+def test_reporting_deadline_eu_fail_late():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="EU",
         trade_date=pd.Timestamp("2023-05-01"),
         reporting_timestamp=pd.Timestamp("2023-05-05"),
     ))
@@ -81,14 +87,58 @@ def test_emir_reporting_deadline_fail_late():
     assert result.severity == "HIGH"
 
 
-def test_mifid_field_completeness_fail_missing_venue():
-    result = MiFIDFieldCompletenessRule().evaluate(base_row(venue=""))
+def test_reporting_deadline_us_same_day_pass():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="US",
+        trade_date=pd.Timestamp("2023-05-01"),
+        reporting_timestamp=pd.Timestamp("2023-05-01"),
+    ))
+    assert result.status == "PASS"
+
+
+def test_reporting_deadline_us_fail_next_day():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="US",
+        trade_date=pd.Timestamp("2023-05-01"),
+        reporting_timestamp=pd.Timestamp("2023-05-02"),
+    ))
+    assert result.status == "FAIL"
+
+
+def test_reporting_deadline_apac_pass_within_t2():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="APAC",
+        trade_date=pd.Timestamp("2023-05-01"),
+        reporting_timestamp=pd.Timestamp("2023-05-03"),
+    ))
+    assert result.status == "PASS"
+
+
+def test_reporting_deadline_apac_fail_after_t2():
+    result = ReportingDeadlineRule().evaluate(base_row(
+        jurisdiction="APAC",
+        trade_date=pd.Timestamp("2023-05-01"),
+        reporting_timestamp=pd.Timestamp("2023-05-05"),
+    ))
+    assert result.status == "FAIL"
+
+
+def test_reporting_deadline_unrecognised_jurisdiction():
+    result = ReportingDeadlineRule().evaluate(base_row(jurisdiction="MARS"))
+    assert result.status == "FAIL"
+    assert result.severity == "MEDIUM"
+
+
+# --- CDECompletenessRule -------------------------------------------------
+
+def test_cde_completeness_fail_missing_venue():
+    result = CDECompletenessRule().evaluate(base_row(venue=""))
     assert result.status == "FAIL"
     assert "venue" in result.message
 
 
-def test_mifid_field_completeness_pass():
-    result = MiFIDFieldCompletenessRule().evaluate(base_row())
+def test_cde_completeness_pass():
+    result = CDECompletenessRule().evaluate(base_row())
     assert result.status == "PASS"
 
 

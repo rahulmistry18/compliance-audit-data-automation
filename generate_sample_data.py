@@ -2,9 +2,12 @@
 Generates fully synthetic sample_ledger.csv and sample_mandates.csv files
 so the workflow can be run and tested end-to-end without any real data.
 
-A handful of records are deliberately seeded with issues (missing LEI, late
-EMIR reporting, inconsistent mandate status, etc.) so the validator agents
-have something to actually catch.
+Ledger entries are spread across three jurisdictions (EU / US / APAC) so the
+ReportingDeadlineRule and CDECompletenessRule can demonstrate genuinely
+different regulatory deadlines (EU T+1, US same-day, APAC T+2). A handful of
+records are deliberately seeded with issues (late reporting, missing LEI,
+missing CDE fields, inconsistent mandate status, etc.) so the validator
+agents have something to actually catch.
 """
 
 import os
@@ -14,6 +17,9 @@ import pandas as pd
 np.random.seed(42)
 os.makedirs("data", exist_ok=True)
 
+JURISDICTIONS = ["EU", "US", "APAC"]
+DEADLINE_DAYS = {"EU": 1, "US": 0, "APAC": 2}
+
 
 def fake_lei(valid=True):
     if not valid:
@@ -21,28 +27,39 @@ def fake_lei(valid=True):
     return "".join(np.random.choice(list("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 20))
 
 
-def build_ledger(n=25):
+def build_ledger(n=30):
     rows = []
     base_date = pd.Timestamp("2023-05-01")
+    # Cycle jurisdictions so each has a comparable sample size.
+    jurisdictions = [JURISDICTIONS[i % 3] for i in range(n)]
+
+    # Seed exactly one late-reporting breach per jurisdiction (indices 1-based below).
+    late_indices = {5, 14, 22, 27}  # will map to a mix of jurisdictions via the cycle
 
     for i in range(1, n + 1):
+        jurisdiction = jurisdictions[i - 1]
+        deadline_days = DEADLINE_DAYS[jurisdiction]
+
         trade_date = base_date + pd.Timedelta(days=int(np.random.randint(0, 25)))
-        # Most entries report on time (T+1); a few are seeded late.
-        late = i in (5, 14, 22)
-        report_delay_days = np.random.choice([0, 1]) if not late else np.random.choice([2, 3, 4])
-        reporting_timestamp = trade_date + pd.Timedelta(days=int(report_delay_days))
+        late = i in late_indices
+        if late:
+            report_delay_days = deadline_days + int(np.random.choice([1, 2, 3]))
+        else:
+            report_delay_days = int(np.random.choice(range(0, deadline_days + 1))) if deadline_days > 0 else 0
+        reporting_timestamp = trade_date + pd.Timedelta(days=report_delay_days)
 
         is_debit = i % 2 == 0
         amount = round(float(np.random.uniform(1000, 500000)), 2)
 
         row = {
             "transaction_id": f"TXN-{1000 + i}",
+            "jurisdiction": jurisdiction,
             "trade_date": trade_date.date().isoformat(),
             "reporting_timestamp": reporting_timestamp.date().isoformat(),
             "counterparty_lei": fake_lei(valid=(i != 9)),  # TXN-1009 has a bad LEI
             "instrument_id": f"ISIN-DE000{np.random.randint(100000,999999)}" if i != 12 else "",
             "execution_timestamp": trade_date.isoformat(),
-            "venue": np.random.choice(["XPAR", "XLON", "XFRA"]) if i != 17 else "",
+            "venue": np.random.choice(["XPAR", "XLON", "XNYS", "XASX", "XHKG"]) if i != 17 else "",
             "price": round(float(np.random.uniform(90, 110)), 2) if i != 20 else np.nan,
             "debit": amount if is_debit else 0,
             "credit": 0 if is_debit else amount,

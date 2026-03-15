@@ -45,10 +45,10 @@ class Rule:
     def evaluate(self, record: dict) -> RuleResult:
         raise NotImplementedError
 
-    def _pass(self, entity_id, message="OK"):
+    def _pass(self, entity_id, message="OK", domain=None):
         return RuleResult(
             rule_id=self.rule_id,
-            domain=self.domain,
+            domain=domain or self.domain,
             entity_type=self.entity_type,
             entity_id=entity_id,
             status="PASS",
@@ -56,10 +56,10 @@ class Rule:
             message=message,
         )
 
-    def _fail(self, entity_id, severity, message):
+    def _fail(self, entity_id, severity, message, domain=None):
         return RuleResult(
             rule_id=self.rule_id,
-            domain=self.domain,
+            domain=domain or self.domain,
             entity_type=self.entity_type,
             entity_id=entity_id,
             status="FAIL",
