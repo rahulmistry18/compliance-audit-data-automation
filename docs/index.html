@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compliance Audit Dashboard</title>
-<meta name="description" content="Results dashboard for the Compliance Audit Data Automation PoC: EU (EMIR/MiFID II), US (Dodd-Frank/CFTC/SEC) and APAC (ASIC/HKMA-SFC/MAS) rule-based ledger and mandate validation.">
+<meta name="description" content="Simple results dashboard for the Compliance Audit Data Automation PoC: checks financial trades and client contracts against Europe, US, and Asia-Pacific rules.">
 <style>
   :root{
     --canvas:#F3F2F1;
@@ -24,7 +24,7 @@
   }
   *{box-sizing:border-box;}
   html,body{margin:0; background:var(--canvas); color:var(--text); font-family:var(--sans);}
-  body{font-size:14px; line-height:1.45;}
+  body{font-size:14px; line-height:1.5;}
   a{color:var(--accent-dark);}
 
   .app{max-width:1180px; margin:0 auto; padding:0 0 2.5rem;}
@@ -59,6 +59,18 @@
   .navtab.active{color:var(--accent-dark); border-bottom-color:var(--accent); font-weight:600;}
   .navtab:focus-visible{outline:2px solid var(--accent); outline-offset:-2px;}
 
+  /* ---------- plain-language banner ---------- */
+  .summary-banner{
+    background:#EFF6FC; border-bottom:1px solid var(--border); padding:1rem 1.5rem;
+  }
+  .summary-banner p{margin:0; font-size:15px; color:var(--text); max-width:920px;}
+  .summary-banner .tag{
+    display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--accent-dark); margin-bottom:.35rem;
+  }
+  .summary-banner strong.good{color:var(--pass);}
+  .summary-banner strong.bad{color:var(--fail);}
+
   /* ---------- filter bar ---------- */
   .filterbar{
     background:var(--card); border-bottom:1px solid var(--border);
@@ -79,7 +91,7 @@
   .page{display:none;}
   .page.active{display:block;}
 
-  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:0 0 14px;}
+  .kpi-row{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:0 0 8px;}
   .card{
     background:var(--card); border:1px solid var(--border); border-radius:2px;
     box-shadow:0 1px 2px rgba(0,0,0,.05);
@@ -98,9 +110,11 @@
   .kpi-card.pass .kv{color:var(--pass);}
   .kpi-card.fail .kv{color:var(--fail);}
   .kpi-card.warn .kv{color:var(--fail);}
+  .caption-note{font-size:11.5px; color:var(--text-mute); margin:6px 2px 18px;}
 
   .grid-2{display:grid; grid-template-columns:1.4fr 1fr; gap:14px; margin:0 0 14px;}
   .chart-body{padding:1rem;}
+  .chart-caption{font-size:12px; color:var(--text-sub); padding:0 1rem 1rem;}
 
   .legend-row{display:flex; gap:16px; padding:.6rem .9rem 0; font-size:12px; color:var(--text-sub);}
   .legend-row .sw{display:inline-block; width:10px; height:10px; border-radius:2px; margin-right:5px; vertical-align:-1px;}
@@ -110,18 +124,23 @@
     text-align:left; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.02em;
     color:var(--text-sub); background:#FAF9F8; padding:.55rem .8rem; border-bottom:1px solid var(--border);
   }
-  tbody td{padding:.55rem .8rem; border-bottom:1px solid #F1F0EF; color:var(--text);}
+  tbody td{padding:.6rem .8rem; border-bottom:1px solid #F1F0EF; color:var(--text);}
   tbody tr:hover{background:#FAF9F8;}
   tbody tr.filtered-out{display:none;}
   td.num{text-align:right; font-variant-numeric:tabular-nums;}
-  td.mono, th.mono{font-family:Consolas,"SFMono-Regular",Menlo,monospace; font-size:12px;}
+  td.mono, th.mono{font-family:Consolas,"SFMono-Regular",Menlo,monospace; font-size:11.5px; color:var(--text-mute);}
   .badge{
     display:inline-block; font-size:11px; font-weight:600; padding:2px 9px; border-radius:10px;
   }
   .badge.pass{background:var(--pass-bg); color:var(--pass);}
   .badge.fail{background:var(--fail-bg); color:var(--fail);}
   .badge.zero{background:#F1F0EF; color:var(--text-mute);}
-  .badge.region{background:#EFF6FC; color:var(--accent-dark);}
+  .badge.region{background:#EFF6FC; color:var(--accent-dark); font-weight:600;}
+  .status-dot{display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:7px; vertical-align:1px;}
+  .status-dot.ok{background:var(--pass);}
+  .status-dot.warn{background:var(--fail);}
+  .rule-name{font-weight:600; color:var(--text);}
+  .rule-sub{display:block; font-size:11px; color:var(--text-mute); margin-top:1px;}
 
   .empty-state{padding:1.2rem; text-align:center; color:var(--text-mute); font-size:12.5px; display:none;}
 
@@ -151,7 +170,7 @@
   }
   @media (max-width:560px){
     .kpi-row{grid-template-columns:1fr;}
-    .topbar, .filterbar{padding:.8rem 1rem;}
+    .topbar, .filterbar, .summary-banner{padding:.8rem 1rem;}
     .content{padding:1rem;}
   }
 
@@ -167,116 +186,126 @@
   <div class="topbar">
     <div class="title-block">
       <h1>Compliance Audit Dashboard</h1>
-      <p>EU / US / APAC rule-based ledger and mandate validation &middot; Compliance Audit Data Automation PoC</p>
+      <p>Checks financial trades and client contracts for problems, automatically</p>
     </div>
     <div class="meta">
-      <span class="refresh"><span class="dot" aria-hidden="true"></span>Data as of Jun 2023 (synthetic)</span>
+      <span class="refresh"><span class="dot" aria-hidden="true"></span>Sample data (not real trades)</span>
       <button class="btn" id="resetBtn" type="button">Reset filters</button>
     </div>
   </div>
 
   <div class="navtabs" role="tablist">
-    <button class="navtab active" data-page="overview" type="button" role="tab">Overview</button>
-    <button class="navtab" data-page="learn" type="button" role="tab">Learn: EMIR &amp; MiFID II</button>
-    <button class="navtab" data-page="global" type="button" role="tab">Global landscape</button>
+    <button class="navtab active" data-page="overview" type="button" role="tab">Results</button>
+    <button class="navtab" data-page="learn" type="button" role="tab">What do these rules mean?</button>
+    <button class="navtab" data-page="global" type="button" role="tab">Rules by country</button>
+    <button class="navtab" data-page="source" type="button" role="tab">Where this data comes from</button>
   </div>
 
   <!-- ============ OVERVIEW PAGE ============ -->
   <div class="page active" id="page-overview">
+
+    <div class="summary-banner">
+      <p class="tag">In plain terms</p>
+      <p>This tool automatically checked <strong>31 trades</strong> and <strong>12 client contracts</strong> for common problems &mdash; things like late paperwork, missing details, or a contract that was cancelled incorrectly. It ran <strong>191 individual checks</strong> in total. <strong class="good">175 passed</strong> with no issue. <strong class="bad">13 are serious enough</strong> that a person should look at them. Nothing here means fraud or wrongdoing &mdash; most of these are the kind of small paperwork slip-ups every company has, which is exactly why checking automatically instead of by hand is useful.</p>
+    </div>
+
     <div class="filterbar">
       <div class="filter-group">
-        <span class="fl-label">Jurisdiction</span>
-        <button class="pill active" data-filter-jur="All" type="button">All</button>
-        <button class="pill" data-filter-jur="EU" type="button">EU</button>
-        <button class="pill" data-filter-jur="US" type="button">US</button>
-        <button class="pill" data-filter-jur="APAC" type="button">APAC</button>
-        <button class="pill" data-filter-jur="Other" type="button">Governance / Global</button>
+        <span class="fl-label">Where the trade happened</span>
+        <button class="pill active" data-filter-jur="All" type="button">Everywhere</button>
+        <button class="pill" data-filter-jur="EU" type="button">Europe</button>
+        <button class="pill" data-filter-jur="US" type="button">United States</button>
+        <button class="pill" data-filter-jur="APAC" type="button">Asia-Pacific</button>
+        <button class="pill" data-filter-jur="Other" type="button">Internal checks</button>
       </div>
       <div class="filter-group">
-        <span class="fl-label">Status</span>
-        <button class="pill active" data-filter-status="All" type="button">All</button>
-        <button class="pill" data-filter-status="Fail" type="button">Failed only</button>
+        <span class="fl-label">Show</span>
+        <button class="pill active" data-filter-status="All" type="button">Everything</button>
+        <button class="pill" data-filter-status="Fail" type="button">Only problems</button>
       </div>
     </div>
 
     <div class="content">
       <div class="kpi-row">
         <div class="card kpi-card">
-          <p class="kl">Rule evaluations</p>
+          <p class="kl">Checks run</p>
           <p class="kv" id="kpiTotal">191</p>
-          <p class="ks" id="kpiTotalSub">31 ledger entries (EU/US/APAC) &middot; 12 mandates</p>
+          <p class="ks" id="kpiTotalSub">31 trades + 12 contracts, several checks each</p>
         </div>
         <div class="card kpi-card pass">
-          <p class="kl">Pass rate</p>
+          <p class="kl">All clear</p>
           <p class="kv" id="kpiPassRate">92%</p>
-          <p class="ks" id="kpiPassSub">176 passed</p>
+          <p class="ks" id="kpiPassSub">175 checks passed with no issue</p>
         </div>
         <div class="card kpi-card fail">
-          <p class="kl">Failed checks</p>
-          <p class="kv" id="kpiFail">15</p>
-          <p class="ks" id="kpiFailSub">across 8 rule types</p>
+          <p class="kl">Found a problem</p>
+          <p class="kv" id="kpiFail">16</p>
+          <p class="ks" id="kpiFailSub">small issues worth noting</p>
         </div>
         <div class="card kpi-card warn">
-          <p class="kl">High severity</p>
+          <p class="kl">Needs a person now</p>
           <p class="kv" id="kpiEsc">13</p>
-          <p class="ks">flagged for review</p>
+          <p class="ks">serious enough to review today</p>
         </div>
       </div>
+      <p class="caption-note">"Needs a person now" is the subset of problems serious enough that someone should manually review them, rather than just note and move on.</p>
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head"><h2>Findings by domain</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+          <div class="card-head"><h2>Where the problems are</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
           <div class="legend-row">
             <span><span class="sw" style="background:var(--pass);"></span>Passed</span>
-            <span><span class="sw" style="background:var(--fail);"></span>Failed</span>
+            <span><span class="sw" style="background:var(--fail);"></span>Had a problem</span>
           </div>
           <div class="chart-body">
-            <div style="position:relative; height:250px;">
-              <canvas id="domainChart" role="img" aria-label="Stacked bar chart of pass and fail counts by domain: EU 21 passed 1 failed, US 16 passed 4 failed, APAC 18 passed 2 failed, Bookkeeping 59 passed 3 failed, Governance 32 passed 4 failed, Global LEI check 30 passed 1 failed.">
-                EU: 21 pass / 1 fail. US: 16 pass / 4 fail. APAC: 18 pass / 2 fail. Bookkeeping: 59 pass / 3 fail. Governance: 32 pass / 4 fail. Global LEI: 30 pass / 1 fail.
+            <div style="position:relative; height:230px;">
+              <canvas id="domainChart" role="img" aria-label="Bar chart: Europe 21 passed 1 problem, United States 16 passed 4 problems, Asia-Pacific 18 passed 2 problems, Internal checks 120 passed 9 problems.">
+                Europe: 21 passed, 1 problem. United States: 16 passed, 4 problems. Asia-Pacific: 18 passed, 2 problems. Internal checks: 120 passed, 9 problems.
               </canvas>
             </div>
           </div>
+          <p class="chart-caption">Each bar is a group of trades. A taller red section means more problems were found in that group.</p>
         </div>
 
         <div class="card">
-          <div class="card-head"><h2>Pass / fail split</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+          <div class="card-head"><h2>Overall health</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
           <div class="chart-body">
-            <div style="position:relative; height:250px;">
-              <canvas id="splitChart" role="img" aria-label="Donut chart showing 176 passed checks and 15 failed checks out of 191 total.">
-                176 passed, 15 failed, out of 191 total rule evaluations.
+            <div style="position:relative; height:230px;">
+              <canvas id="splitChart" role="img" aria-label="Donut chart: 175 passed, 16 had a problem, out of 191 total checks.">
+                175 passed, 16 had a problem, out of 191 total checks.
               </canvas>
             </div>
           </div>
+          <p class="chart-caption">Most of the circle is green, meaning most checks passed. The red slice is small &mdash; about 1 in 13 checks found something.</p>
         </div>
       </div>
 
       <div class="card" style="margin-bottom:14px;">
-        <div class="card-head"><h2>Rule register</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+        <div class="card-head"><h2>What each check does</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
         <div style="overflow-x:auto;">
           <table>
             <thead>
               <tr>
-                <th>Rule ID</th><th>Applies to</th><th>Checks</th>
-                <th class="num">Total</th><th class="num">Passed</th><th class="num">Failed</th><th class="num">Escalated</th>
+                <th>Check</th><th>Where it applies</th>
+                <th class="num">Times run</th><th class="num">Passed</th><th class="num">Problems</th><th class="num">Urgent</th>
               </tr>
             </thead>
             <tbody id="registerBody"></tbody>
           </table>
-          <p class="empty-state" id="registerEmpty">No rules match the current filters.</p>
+          <p class="empty-state" id="registerEmpty">Nothing matches the current filters.</p>
         </div>
       </div>
 
       <div class="card">
-        <div class="card-head"><h2>Escalated findings &mdash; high severity</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
+        <div class="card-head"><h2>The 13 things that need a person to look at them</h2><span class="dots" aria-hidden="true">&#8942;</span></div>
         <div style="overflow-x:auto;">
           <table>
             <thead>
-              <tr><th>Rule ID</th><th>Applies to</th><th>Entity</th><th>Finding</th></tr>
+              <tr><th>Record</th><th>Where</th><th>What's wrong, in plain terms</th></tr>
             </thead>
             <tbody id="escBody"></tbody>
           </table>
-          <p class="empty-state" id="escEmpty">No escalations match the current filters.</p>
+          <p class="empty-state" id="escEmpty">Nothing matches the current filters.</p>
         </div>
       </div>
     </div>
@@ -285,99 +314,107 @@
   <!-- ============ LEARN PAGE ============ -->
   <div class="page" id="page-learn">
     <div class="content">
+      <div class="summary-banner" style="margin:0 0 14px; border:1px solid var(--border);">
+        <p>New to this? Two rules do most of the work here: <strong>EMIR</strong> and <strong>MiFID II</strong>. Both are European rules, but the same idea shows up under different names in the US and Asia &mdash; explained below.</p>
+      </div>
+
       <div class="learn-grid">
         <div class="card explainer">
-          <p class="kicker">EU &middot; ESMA</p>
-          <h3>EMIR — European Market Infrastructure Regulation</h3>
-          <p>Think of it as a radar system for derivatives. Every time a bank, fund, or company trades a derivative (a contract whose value depends on something else — an interest rate, a currency, a commodity), EMIR requires that trade to be reported to an approved trade repository, generally by the next business day.</p>
-          <p>Regulators use this to see risk building up across the whole market, instead of finding out only once something has already gone wrong.</p>
-          <p class="oneline">In one line: <strong>does the regulator know this derivative trade happened?</strong></p>
+          <p class="kicker">Rule 1</p>
+          <h3>EMIR &mdash; "did anyone tell the regulator this trade happened?"</h3>
+          <p>Imagine every time a bank makes a certain kind of trade, it has to send a text message to a regulator saying "this happened." EMIR is that rule. It exists so regulators can see risk building up across the whole market, instead of finding out only after something goes wrong.</p>
+          <p>The deadline is usually the next business day. If a trade is reported late, that's a problem this tool catches.</p>
+          <p class="oneline">Plain version: <strong>does the regulator know this trade happened, on time?</strong></p>
         </div>
 
         <div class="card explainer">
-          <p class="kicker">EU &middot; ESMA</p>
-          <h3>MiFID II — Markets in Financial Instruments Directive II</h3>
-          <p>The EU's much broader rulebook for how financial markets operate day to day: what must be disclosed about a trade (price, timing, venue, counterparty), best-execution duties (firms must get clients a fair deal, not just a convenient one), and market transparency.</p>
-          <p>This project checks a simplified slice of MiFID II's transaction-reporting rule (RTS 22): a defined set of fields — instrument ID, timestamp, venue, price, counterparty LEI — must be complete.</p>
-          <p class="oneline">In one line: <strong>was this trade conducted properly, and is it fully documented?</strong></p>
+          <p class="kicker">Rule 2</p>
+          <h3>MiFID II &mdash; "was this trade done properly and written down correctly?"</h3>
+          <p>This is a bigger rulebook covering how trading should work in general: fair prices, honest dealing, and keeping complete records &mdash; who traded what, when, where, and at what price.</p>
+          <p>This tool checks a simple version of that: are the key details (what was traded, when, where, at what price, and who the counterparty was) actually filled in?</p>
+          <p class="oneline">Plain version: <strong>was this trade done properly, and is the paperwork complete?</strong></p>
         </div>
       </div>
 
       <div class="card" style="margin-bottom:14px;">
-        <div class="card-head"><h2>How the rule engine models this</h2></div>
+        <div class="card-head"><h2>How the checks map to real rules</h2></div>
         <div style="overflow-x:auto;">
           <table class="reg-table">
-            <thead><tr><th>Rule ID</th><th>What it checks</th><th>Regulatory basis</th></tr></thead>
+            <thead><tr><th>This check&hellip;</th><th>&hellip;is really asking</th><th>&hellip;based on</th></tr></thead>
             <tbody>
-              <tr><td class="mono">REPORT-001</td><td class="small">Was the trade reported within the deadline for its jurisdiction?</td><td class="small">EMIR (EU) &middot; Dodd-Frank Title VII (US) &middot; ASIC/HKMA-SFC/MAS rewrites (APAC)</td></tr>
-              <tr><td class="mono">CDE-001</td><td class="small">Are the required trade-detail fields present (instrument, timestamp, venue, price, LEI)?</td><td class="small">MiFID II RTS 22, now aligned globally as "Critical Data Elements" (CPMI-IOSCO)</td></tr>
-              <tr><td class="mono">LEDGER-003</td><td class="small">Is the counterparty identified with a valid Legal Entity Identifier?</td><td class="small">ISO 17442 — identical requirement in every jurisdiction modelled here</td></tr>
-              <tr><td class="mono">LEDGER-001 / 002</td><td class="small">Basic bookkeeping integrity: no duplicate entries, no debit+credit on one line</td><td class="small">General ledger hygiene, not regulation-specific</td></tr>
-              <tr><td class="mono">MANDATE-001/002/003</td><td class="small">Mandate termination logic, notice period, status consistency</td><td class="small">Internal audit governance, not regulation-specific</td></tr>
+              <tr><td class="small">Was it reported on time?</td><td class="small">Did someone tell the regulator about this trade before the deadline?</td><td class="small">EMIR in Europe, similar rules in the US and Asia &mdash; deadlines differ by country</td></tr>
+              <tr><td class="small">Is the paperwork complete?</td><td class="small">Are the trade's key details filled in &mdash; what, when, where, price, who?</td><td class="small">MiFID II in Europe, now a shared global standard everywhere</td></tr>
+              <tr><td class="small">Is the counterparty properly identified?</td><td class="small">Does the other party to the trade have a valid ID code?</td><td class="small">A single global ID system used everywhere, not just Europe</td></tr>
+              <tr><td class="small">Basic bookkeeping</td><td class="small">No duplicate entries, no entries that don't add up</td><td class="small">Ordinary accounting hygiene, not a specific regulation</td></tr>
+              <tr><td class="small">Contract cancellation checks</td><td class="small">Was a client contract cancelled properly, with the right notice?</td><td class="small">Internal company policy, not a specific regulation</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div class="callout">
-        <strong>Why this matters in practice:</strong> EMIR and MiFID II overlap but aren't the same thing — a trade can be perfectly EMIR-compliant (reported on time) while still failing MiFID II's field-completeness requirement, or vice versa. Treating them as one rule would hide half the findings a real audit would catch.
+        <strong>Why bother checking both separately?</strong> A trade can be reported on time (fine by rule 1) but still be missing details (a problem under rule 2), or the other way around. Treating them as one check would hide half the real problems.
       </div>
-      <p class="disclaimer">Simplified for teaching purposes — not legal advice. See the Global landscape tab and the project README for sources and caveats.</p>
+      <p class="disclaimer">Simplified for a general audience. See the "Rules by country" tab or the project README for the full detail.</p>
     </div>
   </div>
 
   <!-- ============ GLOBAL LANDSCAPE PAGE ============ -->
   <div class="page" id="page-global">
     <div class="content">
+      <div class="summary-banner" style="margin:0 0 14px; border:1px solid var(--border);">
+        <p>The rule "report the trade on time" exists almost everywhere &mdash; it's just called something different, and the deadline is different, depending on the country.</p>
+      </div>
+
       <div class="card" style="margin-bottom:14px;">
-        <div class="card-head"><h2>Trade-reporting regimes by region (2024&ndash;2026)</h2></div>
+        <div class="card-head"><h2>Reporting deadlines by country</h2></div>
         <div style="overflow-x:auto;">
           <table class="reg-table">
             <thead>
-              <tr><th>Region</th><th>Regulator(s)</th><th>Framework</th><th>Deadline</th><th>What's changed recently</th></tr>
+              <tr><th>Country / region</th><th>Who's in charge</th><th>What it's called</th><th>Deadline</th><th>Recently updated</th></tr>
             </thead>
             <tbody>
               <tr>
-                <td><span class="badge region">EU</span></td>
+                <td><span class="badge region">Europe</span></td>
                 <td class="small">ESMA</td>
-                <td class="small">EMIR (REFIT) + MiFID II / MiFIR</td>
-                <td class="mono">T+1</td>
-                <td class="small">EMIR REFIT reporting standards live since Apr 2024. EMIR 3.0's Active Account Requirement in force since Dec 2024 (RTS in force Feb 2026, first reports due Jul 2026). MiFID III/MiFIR II transparency reforms &mdash; incl. a PFOF ban and a new EU consolidated tape &mdash; phasing in through 2026&ndash;2027.</td>
+                <td class="small">EMIR / MiFID II</td>
+                <td class="mono">Next day</td>
+                <td class="small">Rules were rewritten in 2024, with a further update ("EMIR 3.0") in force since late 2024 and new technical details from early 2026.</td>
               </tr>
               <tr>
-                <td><span class="badge region">UK</span></td>
+                <td><span class="badge region">United Kingdom</span></td>
                 <td class="small">FCA / Bank of England</td>
-                <td class="small">UK EMIR (separate since Brexit)</td>
-                <td class="mono">T+1</td>
-                <td class="small">UK EMIR Refit completed Mar 2025; further reporting-field amendments in force Jan 2026.</td>
+                <td class="small">UK EMIR (its own separate version, since Brexit)</td>
+                <td class="mono">Next day</td>
+                <td class="small">Fully rewritten by March 2025, with small updates since.</td>
               </tr>
               <tr>
-                <td><span class="badge region">US</span></td>
-                <td class="small">CFTC (swaps) / SEC (security-based swaps)</td>
-                <td class="small">Dodd-Frank Title VII &mdash; CFTC Parts 43/45, SEC Reg SBSR</td>
-                <td class="mono">Same-day</td>
-                <td class="small">SEC &amp; CFTC signed a Joint Harmonization Initiative MOU (Mar 2026) and opened a joint comment period (Jun&ndash;Aug 2026) to align their historically separate reporting regimes.</td>
+                <td><span class="badge region">United States</span></td>
+                <td class="small">CFTC and SEC</td>
+                <td class="small">Dodd-Frank reporting rules</td>
+                <td class="mono">Same day</td>
+                <td class="small">The two US regulators used to run separate, slightly conflicting versions of this rule. In 2026 they agreed to work together and merge them.</td>
               </tr>
               <tr>
-                <td><span class="badge region">APAC</span></td>
-                <td class="small">ASIC (Australia)</td>
-                <td class="small">Derivative Transaction Rules 2024</td>
-                <td class="mono">T+2</td>
-                <td class="small">2024 Rules moved the deadline from T+1 to T+2 to align with the rest of Asia-Pacific; further scope changes for foreign firms took effect Oct 2025.</td>
+                <td><span class="badge region">Australia</span></td>
+                <td class="small">ASIC</td>
+                <td class="small">Derivative reporting rules</td>
+                <td class="mono">2 days</td>
+                <td class="small">The deadline was relaxed from "next day" to "2 days" in 2024 to make it easier for companies to comply.</td>
               </tr>
               <tr>
-                <td><span class="badge region">APAC</span></td>
-                <td class="small">HKMA / SFC (Hong Kong)</td>
-                <td class="small">OTC derivatives reporting regime</td>
-                <td class="mono">T+2</td>
-                <td class="small">Mandatory Unique Transaction ID (UTI) and Unique Product ID (UPI) from Sep 2025, standardizing Critical Data Elements globally.</td>
+                <td><span class="badge region">Hong Kong</span></td>
+                <td class="small">HKMA / SFC</td>
+                <td class="small">OTC derivatives reporting</td>
+                <td class="mono">2 days</td>
+                <td class="small">New ID-tagging requirements from late 2025, matching a shared global format.</td>
               </tr>
               <tr>
-                <td><span class="badge region">APAC</span></td>
-                <td class="small">MAS (Singapore)</td>
-                <td class="small">Securities and Futures Act derivatives reporting</td>
-                <td class="mono">T+2</td>
-                <td class="small">Rewritten to adopt the same global UTI/UPI/CDE standard as Australia, Hong Kong, and Japan.</td>
+                <td><span class="badge region">Singapore</span></td>
+                <td class="small">MAS</td>
+                <td class="small">Derivatives reporting</td>
+                <td class="mono">2 days</td>
+                <td class="small">Rewritten to use the same shared global format as Australia, Hong Kong, and Japan.</td>
               </tr>
             </tbody>
           </table>
@@ -386,21 +423,65 @@
 
       <div class="grid-2">
         <div class="card">
-          <div class="card-head"><h2>Reporting deadline by region</h2></div>
+          <div class="card-head"><h2>Deadline comparison</h2></div>
           <div class="chart-body">
-            <div style="position:relative; height:220px;">
-              <canvas id="deadlineChart" role="img" aria-label="Bar chart of reporting deadlines in business days: US 0 (same day), EU 1, APAC 2."></canvas>
+            <div style="position:relative; height:200px;">
+              <canvas id="deadlineChart" role="img" aria-label="Bar chart of reporting deadlines: United States same day, Europe next day, Asia-Pacific 2 days."></canvas>
             </div>
           </div>
         </div>
         <div class="card explainer">
-          <p class="kicker">The pattern worth noticing</p>
-          <h3>Different deadlines, converging data standards</h3>
-          <p>The US wants near-real-time visibility into the world's largest derivatives market. The EU sits at T+1. Asia-Pacific regulators deliberately relaxed to T+2 to ease implementation across multiple domestic regimes.</p>
-          <p>But since 2024&ndash;2025, all of them have converged on the <strong>same underlying data fields</strong> &mdash; Unique Transaction Identifiers (UTI), Unique Product Identifiers (UPI), and Critical Data Elements (CDE) &mdash; set by the international standard-setters CPMI and IOSCO. That's what <span class="mono" style="font-family:Consolas,monospace;">CDE-001</span> in this project checks, regardless of jurisdiction.</p>
+          <p class="kicker">The interesting part</p>
+          <h3>Different deadlines, same paperwork</h3>
+          <p>The US wants to know almost immediately, since it's the biggest market. Europe gives a day. Asia-Pacific gives two days, on purpose, to make the rule easier to follow.</p>
+          <p>But since 2024&ndash;2025, everyone agreed on the <strong>same required details</strong> &mdash; the same fields, the same ID formats &mdash; even though the deadlines are different. That agreement is what the "is the paperwork complete" check in this tool is based on.</p>
         </div>
       </div>
-      <p class="disclaimer">Figures simplified for teaching purposes and reflect publicly available regulatory guidance as of mid-2026 (ESMA, UK FCA/Bank of England, US CFTC/SEC, ASIC, HKMA/SFC, MAS). Not legal advice — always check current primary regulatory text before relying on any deadline or field list operationally.</p>
+      <p class="disclaimer">Simplified for a general audience and current as of mid-2026 public regulatory guidance. Not legal advice.</p>
+    </div>
+  </div>
+
+  <!-- ============ DATA SOURCE PAGE ============ -->
+  <div class="page" id="page-source">
+    <div class="content">
+      <div class="summary-banner" style="margin:0 0 14px; border:1px solid var(--border);">
+        <p>Short version: <strong>the trades and contracts on this dashboard are made up.</strong> The rules and deadlines they're checked against are real. Here's exactly what that means.</p>
+      </div>
+
+      <div class="kpi-row" style="grid-template-columns:1fr 1fr;">
+        <div class="card kpi-card fail">
+          <p class="kl">Trade &amp; contract records</p>
+          <p class="kv">0% real</p>
+          <p class="ks">All 31 trades and 12 contracts are fabricated for this demo. No real client, trade, or company appears anywhere in this dataset.</p>
+        </div>
+        <div class="card kpi-card pass">
+          <p class="kl">Rules &amp; deadlines applied</p>
+          <p class="kv">100% real</p>
+          <p class="ks">The reporting deadlines, required fields, and regulator names come from actual public regulatory text (EMIR, MiFID II, Dodd-Frank, ASIC, HKMA/SFC, MAS).</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:14px;">
+        <div class="card-head"><h2>What's real and what's fabricated, in detail</h2></div>
+        <div style="overflow-x:auto;">
+          <table class="reg-table">
+            <thead><tr><th>Item</th><th>Status</th><th>Explanation</th></tr></thead>
+            <tbody>
+              <tr><td class="small">Company names (e.g. "Alderbrook Capital LLP")</td><td><span class="badge fail">Fabricated</span></td><td class="small">Invented names, not connected to any real firm. Any resemblance to a real company is coincidental.</td></tr>
+              <tr><td class="small">Trade amounts, dates, ID codes</td><td><span class="badge fail">Fabricated</span></td><td class="small">Randomly generated for this demo, formatted to look like real trade data.</td></tr>
+              <tr><td class="small">Which trades are "late" or "missing details"</td><td><span class="badge fail">Fabricated</span></td><td class="small">A handful of records were deliberately broken on purpose so the checks have something to catch and this dashboard isn't just a wall of green.</td></tr>
+              <tr><td class="small">The reporting deadlines themselves (next-day, same-day, 2 days)</td><td><span class="badge pass">Real</span></td><td class="small">Taken from public regulatory guidance, current as of mid-2026 (see the "Rules by country" tab for sources).</td></tr>
+              <tr><td class="small">The required trade-detail fields (instrument, price, venue, etc.)</td><td><span class="badge pass">Real</span></td><td class="small">Based on the actual field lists regulators require, simplified to five fields for this demo.</td></tr>
+              <tr><td class="small">The regulator and framework names (EMIR, MiFID II, Dodd-Frank, ASIC, etc.)</td><td><span class="badge pass">Real</span></td><td class="small">These are the actual organizations and rules; only the trades being checked against them are invented.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Why show fake data at all?</strong> This project is a proof of concept demonstrating how the checking process works, not a live audit of anyone's real trades. Using fabricated data means it can be shared publicly (in a portfolio, for example) with zero privacy or confidentiality risk, while the rules being demonstrated are the genuine ones companies have to follow.
+      </div>
+      <p class="disclaimer">Regenerate this sample data yourself with <span class="mono" style="font-family:Consolas,monospace;">python generate_sample_data.py</span> in the project repository &mdash; every run produces a fresh, equally fictional dataset.</p>
     </div>
   </div>
 
@@ -412,36 +493,36 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-  // rule register: domain doubles as "applies to" (jurisdiction label or internal category)
+  // rule register: domain = filter bucket (EU/US/APAC/Other), label = plain "where it applies"
   var register = [
-    {id:"REPORT-001", domain:"US", label:"US \u2014 CFTC / SEC (Dodd-Frank Title VII)", desc:"Trade-reporting deadline (same-day)", total:10, pass:8, fail:2, esc:2},
-    {id:"CDE-001", domain:"US", label:"US \u2014 CFTC / SEC (Dodd-Frank Title VII)", desc:"Critical Data Element completeness", total:10, pass:8, fail:2, esc:2},
-    {id:"MANDATE-003", domain:"Other", label:"Governance (internal)", desc:"Status / date consistency", total:12, pass:9, fail:3, esc:2},
-    {id:"LEDGER-002", domain:"Other", label:"Bookkeeping (internal)", desc:"Duplicate transaction ID detection", total:31, pass:29, fail:2, esc:2},
-    {id:"REPORT-001", domain:"APAC", label:"APAC \u2014 ASIC / HKMA-SFC / MAS", desc:"Trade-reporting deadline (T+2)", total:10, pass:9, fail:1, esc:1},
-    {id:"CDE-001", domain:"APAC", label:"APAC \u2014 ASIC / HKMA-SFC / MAS", desc:"Critical Data Element completeness", total:10, pass:9, fail:1, esc:1},
-    {id:"REPORT-001", domain:"EU", label:"EU \u2014 ESMA / EMIR", desc:"Trade-reporting deadline (T+1)", total:11, pass:10, fail:1, esc:1},
-    {id:"LEDGER-003", domain:"Other", label:"Global \u2014 ISO 17442 (LEI)", desc:"Counterparty LEI format validation", total:31, pass:30, fail:1, esc:1},
-    {id:"MANDATE-001", domain:"Other", label:"Governance (internal)", desc:"Termination date after start date", total:12, pass:11, fail:1, esc:1},
-    {id:"LEDGER-001", domain:"Other", label:"Bookkeeping (internal)", desc:"Debit / credit balance per entry", total:31, pass:30, fail:1, esc:0},
-    {id:"CDE-001", domain:"EU", label:"EU \u2014 ESMA / MiFID II", desc:"Critical Data Element completeness", total:11, pass:11, fail:0, esc:0},
-    {id:"MANDATE-002", domain:"Other", label:"Governance (internal)", desc:"Minimum notice period (30 days)", total:12, pass:12, fail:0, esc:0}
+    {id:"REPORT-001", domain:"US", label:"United States", name:"Was it reported on time?", sub:"Reported within the same business day", total:10, pass:8, fail:2, esc:2},
+    {id:"CDE-001", domain:"US", label:"United States", name:"Is the paperwork complete?", sub:"Key trade details filled in", total:10, pass:8, fail:2, esc:2},
+    {id:"MANDATE-003", domain:"Other", label:"Internal checks", name:"Contract status matches its dates", sub:"Client contract governance", total:12, pass:9, fail:3, esc:2},
+    {id:"LEDGER-002", domain:"Other", label:"Internal checks", name:"No duplicate trade entries", sub:"Bookkeeping hygiene", total:31, pass:29, fail:2, esc:2},
+    {id:"REPORT-001", domain:"APAC", label:"Asia-Pacific", name:"Was it reported on time?", sub:"Reported within 2 business days", total:10, pass:9, fail:1, esc:1},
+    {id:"CDE-001", domain:"APAC", label:"Asia-Pacific", name:"Is the paperwork complete?", sub:"Key trade details filled in", total:10, pass:9, fail:1, esc:1},
+    {id:"REPORT-001", domain:"EU", label:"Europe", name:"Was it reported on time?", sub:"Reported by the next business day", total:11, pass:10, fail:1, esc:1},
+    {id:"LEDGER-003", domain:"Other", label:"Internal checks", name:"Counterparty properly identified", sub:"Valid global ID code present", total:31, pass:30, fail:1, esc:1},
+    {id:"MANDATE-001", domain:"Other", label:"Internal checks", name:"Contract wasn't cancelled before it started", sub:"Client contract governance", total:12, pass:11, fail:1, esc:1},
+    {id:"LEDGER-001", domain:"Other", label:"Internal checks", name:"Entry amounts add up correctly", sub:"Bookkeeping hygiene", total:31, pass:30, fail:1, esc:0},
+    {id:"CDE-001", domain:"EU", label:"Europe", name:"Is the paperwork complete?", sub:"Key trade details filled in", total:11, pass:11, fail:0, esc:0},
+    {id:"MANDATE-002", domain:"Other", label:"Internal checks", name:"Client got enough notice", sub:"Client contract governance", total:12, pass:11, fail:1, esc:0}
   ];
 
   var escalations = [
-    {rule:"REPORT-001", domain:"US", label:"US \u2014 CFTC/SEC", entity:"TXN-1005", msg:"Reported 1 day(s) after the US T+0 (same-day) deadline."},
-    {rule:"LEDGER-002", domain:"Other", label:"Bookkeeping", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger."},
-    {rule:"LEDGER-003", domain:"Other", label:"Global \u2014 LEI", entity:"TXN-1009", msg:"counterparty_lei missing or not 20 characters."},
-    {rule:"CDE-001", domain:"APAC", label:"APAC \u2014 ASIC/HKMA-SFC/MAS", entity:"TXN-1012", msg:"Missing required Critical Data Element(s): instrument_id."},
-    {rule:"REPORT-001", domain:"US", label:"US \u2014 CFTC/SEC", entity:"TXN-1014", msg:"Reported 2 day(s) after the US T+0 (same-day) deadline."},
-    {rule:"CDE-001", domain:"US", label:"US \u2014 CFTC/SEC", entity:"TXN-1017", msg:"Missing required Critical Data Element(s): venue."},
-    {rule:"CDE-001", domain:"US", label:"US \u2014 CFTC/SEC", entity:"TXN-1020", msg:"Missing required Critical Data Element(s): price."},
-    {rule:"REPORT-001", domain:"EU", label:"EU \u2014 ESMA / EMIR", entity:"TXN-1022", msg:"Reported 1 day(s) after the EU T+1 deadline."},
-    {rule:"REPORT-001", domain:"APAC", label:"APAC \u2014 ASIC/HKMA-SFC/MAS", entity:"TXN-1027", msg:"Reported 1 day(s) after the APAC T+2 deadline."},
-    {rule:"LEDGER-002", domain:"Other", label:"Bookkeeping", entity:"TXN-1008", msg:"Duplicate transaction_id detected in ledger. (second occurrence)"},
-    {rule:"MANDATE-001", domain:"Other", label:"Governance", entity:"MND-204", msg:"termination_date is earlier than start_date."},
-    {rule:"MANDATE-003", domain:"Other", label:"Governance", entity:"MND-208", msg:"Status is ACTIVE but termination_date has already passed."},
-    {rule:"MANDATE-003", domain:"Other", label:"Governance", entity:"MND-211", msg:"Status is TERMINATED but no termination_date is recorded."}
+    {domain:"US", label:"United States", entity:"Trade TXN-1005", msg:"Reported 1 day late."},
+    {domain:"Other", label:"Internal", entity:"Trade TXN-1008", msg:"This trade ID was entered twice by mistake."},
+    {domain:"Other", label:"Internal", entity:"Trade TXN-1009", msg:"The counterparty's ID code is missing or wrong."},
+    {domain:"APAC", label:"Asia-Pacific", entity:"Trade TXN-1012", msg:"Missing a required detail: what was traded."},
+    {domain:"US", label:"United States", entity:"Trade TXN-1014", msg:"Reported 2 days late."},
+    {domain:"US", label:"United States", entity:"Trade TXN-1017", msg:"Missing a required detail: where it was traded."},
+    {domain:"US", label:"United States", entity:"Trade TXN-1020", msg:"Missing a required detail: the price."},
+    {domain:"EU", label:"Europe", entity:"Trade TXN-1022", msg:"Reported 1 day late."},
+    {domain:"APAC", label:"Asia-Pacific", entity:"Trade TXN-1027", msg:"Reported 1 day late."},
+    {domain:"Other", label:"Internal", entity:"Trade TXN-1008", msg:"This trade ID was entered twice by mistake (second copy)."},
+    {domain:"Other", label:"Internal", entity:"Contract MND-204", msg:"The contract's end date is before its start date, a data entry error."},
+    {domain:"Other", label:"Internal", entity:"Contract MND-208", msg:"Marked as still active, but its end date has already passed."},
+    {domain:"Other", label:"Internal", entity:"Contract MND-211", msg:"Marked as ended, but no end date was recorded."}
   ];
 
   var state = { jur: "All", status: "All" };
@@ -457,10 +538,10 @@
       if (visible) visibleCount++;
       var tr = document.createElement("tr");
       if (!visible) tr.className = "filtered-out";
+      var dotClass = r.fail > 0 ? "warn" : "ok";
       tr.innerHTML =
-        '<td class="mono">' + r.id + '</td>' +
+        '<td><span class="status-dot ' + dotClass + '"></span><span class="rule-name">' + r.name + '</span><span class="rule-sub">' + r.sub + '</span></td>' +
         '<td>' + r.label + '</td>' +
-        '<td>' + r.desc + '</td>' +
         '<td class="num">' + r.total + '</td>' +
         '<td class="num">' + r.pass + '</td>' +
         '<td class="num">' + r.fail + '</td>' +
@@ -480,10 +561,9 @@
       var tr = document.createElement("tr");
       if (!jurMatch) tr.className = "filtered-out";
       tr.innerHTML =
-        '<td class="mono">' + e.rule + '</td>' +
-        '<td>' + e.label + '</td>' +
         '<td class="mono">' + e.entity + '</td>' +
-        '<td>' + e.msg + '</td>';
+        '<td>' + e.label + '</td>' +
+        '<td><span class="status-dot warn"></span>' + e.msg + '</td>';
       body.appendChild(tr);
     });
     document.getElementById("escEmpty").style.display = visibleCount ? "none" : "block";
@@ -497,11 +577,11 @@
     var esc = rows.reduce(function(a,r){ return a + r.esc; }, 0);
     var rate = total ? Math.round((pass/total)*100) : 0;
     document.getElementById("kpiTotal").textContent = total;
-    document.getElementById("kpiTotalSub").textContent = state.jur === "All" ? "31 ledger entries (EU/US/APAC) \u00b7 12 mandates" : rows.length + " rule(s) for " + state.jur;
+    document.getElementById("kpiTotalSub").textContent = state.jur === "All" ? "31 trades + 12 contracts, several checks each" : rows.length + " check type(s) for this group";
     document.getElementById("kpiPassRate").textContent = rate + "%";
-    document.getElementById("kpiPassSub").textContent = pass + " passed";
+    document.getElementById("kpiPassSub").textContent = pass + " checks passed with no issue";
     document.getElementById("kpiFail").textContent = fail;
-    document.getElementById("kpiFailSub").textContent = "across " + rows.filter(function(r){return r.fail>0;}).length + " rules";
+    document.getElementById("kpiFailSub").textContent = "small issues worth noting";
     document.getElementById("kpiEsc").textContent = esc;
   }
 
@@ -552,17 +632,17 @@
   new Chart(document.getElementById("domainChart"), {
     type: "bar",
     data: {
-      labels: ["EU", "US", "APAC", "Bookkeeping", "Governance", "Global (LEI)"],
+      labels: ["Europe", "United States", "Asia-Pacific", "Internal checks"],
       datasets: [
-        { label: "Passed", data: [21, 16, 18, 59, 32, 30], backgroundColor: "#107C10", borderRadius: 2, maxBarThickness: 40 },
-        { label: "Failed", data: [1, 4, 2, 3, 4, 1], backgroundColor: "#D83B01", borderRadius: 2, maxBarThickness: 40 }
+        { label: "Passed", data: [21, 16, 18, 120], backgroundColor: "#107C10", borderRadius: 2, maxBarThickness: 44 },
+        { label: "Had a problem", data: [1, 4, 2, 9], backgroundColor: "#D83B01", borderRadius: 2, maxBarThickness: 44 }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { stacked: true, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11 } }, grid: { display: false } },
+        x: { stacked: true, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11.5 } }, grid: { display: false } },
         y: { stacked: true, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11.5 } }, grid: { color: "#E1DFDD" } }
       },
       plugins: { legend: { display: false } }
@@ -572,8 +652,8 @@
   new Chart(document.getElementById("splitChart"), {
     type: "doughnut",
     data: {
-      labels: ["Passed", "Failed"],
-      datasets: [{ data: [176, 15], backgroundColor: ["#107C10", "#D83B01"], borderColor: "#FFFFFF", borderWidth: 2 }]
+      labels: ["Passed", "Had a problem"],
+      datasets: [{ data: [175, 16], backgroundColor: ["#107C10", "#D83B01"], borderColor: "#FFFFFF", borderWidth: 2 }]
     },
     options: {
       responsive: true,
@@ -586,7 +666,7 @@
   new Chart(document.getElementById("deadlineChart"), {
     type: "bar",
     data: {
-      labels: ["US (same-day)", "EU (T+1)", "APAC (T+2)"],
+      labels: ["United States", "Europe", "Asia-Pacific"],
       datasets: [{ data: [0, 1, 2], backgroundColor: ["#12239E", "#118DFF", "#6B007B"], borderRadius: 2, maxBarThickness: 50 }]
     },
     options: {
@@ -594,7 +674,7 @@
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { beginAtZero: true, max: 2.5, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11 }, stepSize: 1 }, grid: { color: "#E1DFDD" }, title: { display: true, text: "Business days after execution", color: "#605E5C", font: { family: "Segoe UI", size: 11 } } },
+        x: { beginAtZero: true, max: 2.5, ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11 }, stepSize: 1, callback: function(v){ return v===0?"Same day":v+" day"+(v>1?"s":""); } }, grid: { color: "#E1DFDD" } },
         y: { ticks: { color: "#605E5C", font: { family: "Segoe UI", size: 11.5 } }, grid: { display: false } }
       },
       plugins: { legend: { display: false } }

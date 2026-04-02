@@ -2,6 +2,10 @@
 Generates fully synthetic sample_ledger.csv and sample_mandates.csv files
 so the workflow can be run and tested end-to-end without any real data.
 
+Names, instruments, and identifiers here are fabricated to look realistic
+(plausible fund names, instrument types, currencies) but are entirely
+fictional - they do not reference any real company, trade, or contract.
+
 Ledger entries are spread across three jurisdictions (EU / US / APAC) so the
 ReportingDeadlineRule and CDECompletenessRule can demonstrate genuinely
 different regulatory deadlines (EU T+1, US same-day, APAC T+2). A handful of
@@ -20,6 +24,27 @@ os.makedirs("data", exist_ok=True)
 JURISDICTIONS = ["EU", "US", "APAC"]
 DEADLINE_DAYS = {"EU": 1, "US": 0, "APAC": 2}
 
+VENUES = {"EU": ["XPAR", "XLON", "XFRA"], "US": ["XNYS", "XNAS"], "APAC": ["XASX", "XHKG", "XSES"]}
+CURRENCIES = {"EU": "EUR", "US": "USD", "APAC": "AUD"}
+
+INSTRUMENTS = [
+    ("Interest Rate Swap 5Y", "IRS"),
+    ("Interest Rate Swap 10Y", "IRS"),
+    ("FX Forward EUR/USD", "FXF"),
+    ("FX Forward USD/JPY", "FXF"),
+    ("Credit Default Swap", "CDS"),
+    ("Equity Index Option", "EQO"),
+    ("Cross-Currency Swap", "XCS"),
+    ("Commodity Swap - Brent", "CMS"),
+]
+
+COUNTERPARTY_NAMES = [
+    "Alderbrook Capital LLP", "Solano Ridge Asset Management", "Kestrel Harbor Investments",
+    "Northbridge Capital Partners", "Farview Global Markets", "Cedarline Asset Advisors",
+    "Windmere Trading LLC", "Blackthorn Capital Group", "Silverpine Financial Ltd",
+    "Harborstone Investment Partners", "Meridian Ridge Capital", "Oakfield Global Advisors",
+]
+
 
 def fake_lei(valid=True):
     if not valid:
@@ -30,11 +55,8 @@ def fake_lei(valid=True):
 def build_ledger(n=30):
     rows = []
     base_date = pd.Timestamp("2023-05-01")
-    # Cycle jurisdictions so each has a comparable sample size.
     jurisdictions = [JURISDICTIONS[i % 3] for i in range(n)]
-
-    # Seed exactly one late-reporting breach per jurisdiction (indices 1-based below).
-    late_indices = {5, 14, 22, 27}  # will map to a mix of jurisdictions via the cycle
+    late_indices = {5, 14, 22, 27}
 
     for i in range(1, n + 1):
         jurisdiction = jurisdictions[i - 1]
@@ -49,32 +71,33 @@ def build_ledger(n=30):
         reporting_timestamp = trade_date + pd.Timedelta(days=report_delay_days)
 
         is_debit = i % 2 == 0
-        amount = round(float(np.random.uniform(1000, 500000)), 2)
+        amount = round(float(np.random.uniform(50_000, 4_800_000)) / 100, 2) * 100
+        instrument_name, instrument_prefix = INSTRUMENTS[i % len(INSTRUMENTS)]
+        counterparty_name = COUNTERPARTY_NAMES[i % len(COUNTERPARTY_NAMES)]
 
         row = {
             "transaction_id": f"TXN-{1000 + i}",
             "jurisdiction": jurisdiction,
+            "currency": CURRENCIES[jurisdiction],
+            "counterparty_name": counterparty_name,
             "trade_date": trade_date.date().isoformat(),
             "reporting_timestamp": reporting_timestamp.date().isoformat(),
             "counterparty_lei": fake_lei(valid=(i != 9)),  # TXN-1009 has a bad LEI
-            "instrument_id": f"ISIN-DE000{np.random.randint(100000,999999)}" if i != 12 else "",
+            "instrument_id": f"{instrument_prefix}-{2023}{np.random.randint(1000,9999)}" if i != 12 else "",
+            "instrument_name": instrument_name,
             "execution_timestamp": trade_date.isoformat(),
-            "venue": np.random.choice(["XPAR", "XLON", "XNYS", "XASX", "XHKG"]) if i != 17 else "",
+            "venue": np.random.choice(VENUES[jurisdiction]) if i != 17 else "",
             "price": round(float(np.random.uniform(90, 110)), 2) if i != 20 else np.nan,
             "debit": amount if is_debit else 0,
             "credit": 0 if is_debit else amount,
         }
         rows.append(row)
 
-    # Seed one duplicate transaction_id
     dup = rows[3].copy()
     dup["transaction_id"] = rows[7]["transaction_id"]
     rows.append(dup)
 
-    # Seed one entry with both debit and credit populated
     rows[10]["credit"] = 25000.00
-
-    # Seed one entry with neither debit nor credit
     rows[15]["debit"] = 0
     rows[15]["credit"] = 0
 
@@ -88,11 +111,12 @@ def build_mandates(n=12):
     for i in range(1, n + 1):
         start_date = base_start + pd.Timedelta(days=int(np.random.randint(0, 900)))
         mandate_id = f"MND-{200 + i}"
+        client_name = COUNTERPARTY_NAMES[(i + 5) % len(COUNTERPARTY_NAMES)]
 
-        if i in (2, 6, 9):  # active mandates, no termination in progress
+        if i in (2, 6, 9):
             row = {
                 "mandate_id": mandate_id,
-                "client_name": f"Client {i}",
+                "client_name": client_name,
                 "start_date": start_date.date().isoformat(),
                 "termination_request_date": "",
                 "termination_date": "",
@@ -100,13 +124,13 @@ def build_mandates(n=12):
             }
         else:
             request_date = start_date + pd.Timedelta(days=int(np.random.randint(200, 800)))
-            notice_days = int(np.random.choice([15, 30, 45, 60]))  # 15 seeds a short-notice fail
+            notice_days = int(np.random.choice([15, 30, 45, 60]))
             termination_date = request_date + pd.Timedelta(days=notice_days)
             status = "TERMINATED"
 
             row = {
                 "mandate_id": mandate_id,
-                "client_name": f"Client {i}",
+                "client_name": client_name,
                 "start_date": start_date.date().isoformat(),
                 "termination_request_date": request_date.date().isoformat(),
                 "termination_date": termination_date.date().isoformat(),
@@ -114,20 +138,16 @@ def build_mandates(n=12):
             }
         rows.append(row)
 
-    # Seed: termination_date before start_date
     rows[3]["termination_date"] = (base_start - pd.Timedelta(days=10)).date().isoformat()
     rows[3]["termination_request_date"] = (base_start - pd.Timedelta(days=40)).date().isoformat()
 
-    # Seed: status ACTIVE but termination_date already passed
     rows[7]["status"] = "ACTIVE"
     rows[7]["termination_date"] = "2022-01-01"
     rows[7]["termination_request_date"] = "2021-11-01"
 
-    # Seed: status TERMINATED but no termination_date recorded
     rows[10]["status"] = "TERMINATED"
     rows[10]["termination_date"] = ""
 
-    # Seed: unrecognised status value
     rows[11]["status"] = "SUSPENDED"
 
     return pd.DataFrame(rows)

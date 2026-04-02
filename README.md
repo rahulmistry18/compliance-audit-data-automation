@@ -49,9 +49,14 @@ compliance-audit-data-automation/
   requirements.txt
   LICENSE
   generate_sample_data.py     creates synthetic ledger and mandate CSVs
+  build_bi_exports.py         builds Tableau Public / Power BI ready exports
   data/
     sample_ledger.csv
     sample_mandates.csv
+    bi_exports/
+      audit_results.csv              flat export, ready for Tableau Public / Power BI
+      compliance_audit_workbook.xlsx  same data plus a live-formula summary, data dictionary, and data-source sheet
+      README.md                       step-by-step Tableau Public / Power BI import guide
   src/
     config.py                 thresholds, deadlines, notice periods
     data_loader.py             CSV loading and schema validation
@@ -86,6 +91,9 @@ python -m src.main
 
 # 3. run the test suite
 pytest -v
+
+# 4. (optional) build the Tableau Public / Power BI ready exports
+python build_bi_exports.py
 ```
 
 Running `src.main` prints a console summary and writes the audit trail and summary report to `outputs/`.
@@ -100,6 +108,14 @@ Running `src.main` prints a console summary and writes the audit trail and summa
 4. GitHub publishes it at `https://<your-username>.github.io/<repo-name>/` within a minute or two; that's the link to put on your portfolio.
 
 The dashboard currently displays the results from the bundled synthetic sample data. If you re-run the workflow on different data and want the dashboard to reflect it, update the `register` and `escalations` arrays near the bottom of `docs/index.html` with the new figures from `outputs/audit_summary.csv` and `outputs/audit_trail.csv`.
+
+## Using this in Tableau Public or Power BI
+
+`data/bi_exports/` has a flat CSV and a multi-sheet Excel workbook, both ready to import directly into Tableau Public Desktop or Power BI Desktop with no cleanup. See `data/bi_exports/README.md` for a five-minute, step-by-step walkthrough for each tool, including how to publish a public/shareable link from both.
+
+## Data source: what's real and what's synthetic
+
+Every trade, client name, and contract in this project is fabricated for demonstration; none of it is real. What is real: the regulatory deadlines, required data fields, and regulator names, which reflect actual public regulatory guidance current as of mid-2026. In short: the data is fake, the rules it's checked against are not. The `docs/index.html` dashboard has a dedicated "Where this data comes from" tab that lays this out for a non-technical reader, and `data/bi_exports/compliance_audit_workbook.xlsx` has the same disclosure on its Data Source sheet.
 
 ## Understanding EMIR and MiFID II, in plain language
 
