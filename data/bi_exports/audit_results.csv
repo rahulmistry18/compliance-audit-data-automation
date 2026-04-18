@@ -1,192 +1,192 @@
 Record ID,Record Type,Check ID,Applies To,Result,Severity,Needs Review,Finding,Checked At (UTC)
-TXN-1001,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1001,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1001,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1001,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1001,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1002,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1002,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1002,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1002,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1002,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1003,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1003,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1003,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1003,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1003,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1004,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1004,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1004,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1004,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1004,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1005,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1005,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1005,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1005,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Reported 3 day(s) after the US T+0 deadline (US — CFTC / SEC (Dodd-Frank Title VII)).,2026-07-10 05:54
-TXN-1005,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1006,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1006,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1006,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1006,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1006,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1007,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1007,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1007,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1007,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1007,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-002,Bookkeeping,Had a problem,High,Yes,Duplicate transaction_id detected in ledger.,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1009,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1009,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1009,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Had a problem,High,Yes,counterparty_lei missing or not 20 characters.,2026-07-10 05:54
-TXN-1009,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1009,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1010,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1010,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1010,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1010,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1010,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1011,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1011,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1011,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1011,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1011,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1012,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1012,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1012,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1012,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1012,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Had a problem,High,Yes,Missing required Critical Data Element(s): instrument_id.,2026-07-10 05:54
-TXN-1013,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1013,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1013,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1013,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1013,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1014,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1014,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1014,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1014,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Reported 3 day(s) after the US T+0 deadline (US — CFTC / SEC (Dodd-Frank Title VII)).,2026-07-10 05:54
-TXN-1014,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1015,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1015,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1015,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1015,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1015,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1016,Trade,LEDGER-001,Bookkeeping,Had a problem,Medium,No,Entry has neither a debit nor a credit amount.,2026-07-10 05:54
-TXN-1016,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1016,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1016,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1016,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1017,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1017,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1017,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1017,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1017,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Missing required Critical Data Element(s): venue.,2026-07-10 05:54
-TXN-1018,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1018,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1018,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1018,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1018,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1019,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1019,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1019,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1019,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1019,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1020,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1020,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1020,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1020,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1020,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Missing required Critical Data Element(s): price.,2026-07-10 05:54
-TXN-1021,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1021,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1021,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1021,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1021,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1022,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1022,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1022,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1022,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Had a problem,High,Yes,Reported 2 day(s) after the EU T+1 deadline (EU — ESMA / EMIR & MiFID II).,2026-07-10 05:54
-TXN-1022,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1023,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1023,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1023,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1023,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1023,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1024,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1024,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1024,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1024,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1024,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1025,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1025,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1025,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1025,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1025,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1026,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1026,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1026,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1026,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1026,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1027,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1027,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1027,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1027,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Had a problem,High,Yes,Reported 1 day(s) after the APAC T+2 deadline (APAC — ASIC / HKMA-SFC / MAS).,2026-07-10 05:54
-TXN-1027,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1028,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1028,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1028,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1028,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1028,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1029,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1029,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1029,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1029,Trade,REPORT-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1029,Trade,CDE-001,US — CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1030,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1030,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1030,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1030,Trade,REPORT-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1030,Trade,CDE-001,APAC — ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-002,Bookkeeping,Had a problem,High,Yes,Duplicate transaction_id detected in ledger.,2026-07-10 05:54
-TXN-1008,Trade,LEDGER-003,Counterparty Identification (Global — ISO 17442),Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,REPORT-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-TXN-1008,Trade,CDE-001,EU — ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 05:54
-MND-201,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-201,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-201,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-202,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 05:54
-MND-202,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 05:54
-MND-202,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-203,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-203,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-203,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-204,Client Contract,MANDATE-001,Governance,Had a problem,High,Yes,termination_date is earlier than start_date.,2026-07-10 05:54
-MND-204,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-204,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-205,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-205,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-205,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-206,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 05:54
-MND-206,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 05:54
-MND-206,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-207,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-207,Client Contract,MANDATE-002,Governance,Had a problem,Medium,No,Only 15 day(s) notice given; minimum required is 30 day(s).,2026-07-10 05:54
-MND-207,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-208,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-208,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-208,Client Contract,MANDATE-003,Governance,Had a problem,High,Yes,Status is ACTIVE but termination_date has already passed.,2026-07-10 05:54
-MND-209,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 05:54
-MND-209,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 05:54
-MND-209,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-210,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-210,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-210,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-211,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 05:54
-MND-211,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 05:54
-MND-211,Client Contract,MANDATE-003,Governance,Had a problem,High,Yes,Status is TERMINATED but no termination_date is recorded.,2026-07-10 05:54
-MND-212,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-212,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 05:54
-MND-212,Client Contract,MANDATE-003,Governance,Had a problem,Medium,No,Unrecognised status value: 'SUSPENDED'.,2026-07-10 05:54
+TXN-1001,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1001,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1001,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1001,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1001,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1002,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1002,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1002,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1002,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1002,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1003,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1003,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1003,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1003,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1003,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1004,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1004,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1004,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1004,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1004,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1005,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1005,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1005,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1005,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Reported 3 day(s) after the US T+0 deadline (US - CFTC / SEC (Dodd-Frank Title VII)).,2026-07-10 06:01
+TXN-1005,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1006,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1006,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1006,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1006,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1006,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1007,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1007,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1007,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1007,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1007,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-002,Bookkeeping,Had a problem,High,Yes,Duplicate transaction_id detected in ledger.,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1009,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1009,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1009,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Had a problem,High,Yes,counterparty_lei missing or not 20 characters.,2026-07-10 06:01
+TXN-1009,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1009,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1010,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1010,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1010,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1010,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1010,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1011,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1011,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1011,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1011,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1011,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1012,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1012,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1012,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1012,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1012,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Had a problem,High,Yes,Missing required Critical Data Element(s): instrument_id.,2026-07-10 06:01
+TXN-1013,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1013,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1013,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1013,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1013,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1014,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1014,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1014,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1014,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Reported 3 day(s) after the US T+0 deadline (US - CFTC / SEC (Dodd-Frank Title VII)).,2026-07-10 06:01
+TXN-1014,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1015,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1015,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1015,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1015,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1015,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1016,Trade,LEDGER-001,Bookkeeping,Had a problem,Medium,No,Entry has neither a debit nor a credit amount.,2026-07-10 06:01
+TXN-1016,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1016,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1016,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1016,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1017,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1017,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1017,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1017,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1017,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Missing required Critical Data Element(s): venue.,2026-07-10 06:01
+TXN-1018,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1018,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1018,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1018,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1018,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1019,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1019,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1019,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1019,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1019,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1020,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1020,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1020,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1020,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1020,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Had a problem,High,Yes,Missing required Critical Data Element(s): price.,2026-07-10 06:01
+TXN-1021,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1021,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1021,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1021,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1021,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1022,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1022,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1022,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1022,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Had a problem,High,Yes,Reported 2 day(s) after the EU T+1 deadline (EU - ESMA / EMIR & MiFID II).,2026-07-10 06:01
+TXN-1022,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1023,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1023,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1023,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1023,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1023,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1024,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1024,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1024,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1024,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1024,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1025,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1025,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1025,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1025,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1025,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1026,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1026,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1026,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1026,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1026,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1027,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1027,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1027,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1027,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Had a problem,High,Yes,Reported 1 day(s) after the APAC T+2 deadline (APAC - ASIC / HKMA-SFC / MAS).,2026-07-10 06:01
+TXN-1027,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1028,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1028,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1028,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1028,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1028,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1029,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1029,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1029,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1029,Trade,REPORT-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1029,Trade,CDE-001,US - CFTC / SEC (Dodd-Frank Title VII),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1030,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1030,Trade,LEDGER-002,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1030,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1030,Trade,REPORT-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1030,Trade,CDE-001,APAC - ASIC / HKMA-SFC / MAS,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-001,Bookkeeping,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-002,Bookkeeping,Had a problem,High,Yes,Duplicate transaction_id detected in ledger.,2026-07-10 06:01
+TXN-1008,Trade,LEDGER-003,Counterparty Identification (Global - ISO 17442),Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,REPORT-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+TXN-1008,Trade,CDE-001,EU - ESMA / EMIR & MiFID II,Passed,Low,No,OK,2026-07-10 06:01
+MND-201,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-201,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-201,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-202,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 06:01
+MND-202,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 06:01
+MND-202,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-203,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-203,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-203,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-204,Client Contract,MANDATE-001,Governance,Had a problem,High,Yes,termination_date is earlier than start_date.,2026-07-10 06:01
+MND-204,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-204,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-205,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-205,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-205,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-206,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 06:01
+MND-206,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 06:01
+MND-206,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-207,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-207,Client Contract,MANDATE-002,Governance,Had a problem,Medium,No,Only 15 day(s) notice given; minimum required is 30 day(s).,2026-07-10 06:01
+MND-207,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-208,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-208,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-208,Client Contract,MANDATE-003,Governance,Had a problem,High,Yes,Status is ACTIVE but termination_date has already passed.,2026-07-10 06:01
+MND-209,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 06:01
+MND-209,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 06:01
+MND-209,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-210,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-210,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-210,Client Contract,MANDATE-003,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-211,Client Contract,MANDATE-001,Governance,Passed,Low,No,No termination date set; not applicable.,2026-07-10 06:01
+MND-211,Client Contract,MANDATE-002,Governance,Passed,Low,No,Not applicable; no termination in progress.,2026-07-10 06:01
+MND-211,Client Contract,MANDATE-003,Governance,Had a problem,High,Yes,Status is TERMINATED but no termination_date is recorded.,2026-07-10 06:01
+MND-212,Client Contract,MANDATE-001,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-212,Client Contract,MANDATE-002,Governance,Passed,Low,No,OK,2026-07-10 06:01
+MND-212,Client Contract,MANDATE-003,Governance,Had a problem,Medium,No,Unrecognised status value: 'SUSPENDED'.,2026-07-10 06:01

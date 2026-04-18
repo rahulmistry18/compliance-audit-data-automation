@@ -19,7 +19,7 @@ from src.audit_trail import AuditTrail
 
 
 def run_workflow(ledger_path=config.LEDGER_FILE, mandates_path=config.MANDATES_FILE):
-    print("Compliance Audit Data Automation — PoC")
+    print("Compliance Audit Data Automation - PoC")
     print("=" * 60)
 
     try:

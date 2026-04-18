@@ -2,18 +2,18 @@
 LedgerValidatorAgent
 
 Each rule below runs autonomously over every ledger row and returns a
-RuleResult, without any per-row orchestration from the caller — that's the
+RuleResult, without any per-row orchestration from the caller - that's the
 "agentic" part: hand it a DataFrame, get back a fully traced set of findings.
 
 Two rules are jurisdiction-aware (ReportingDeadlineRule, CDECompletenessRule)
 because trade reporting is genuinely different by region:
 
-  EU    — EMIR REFIT / MiFID II RTS 22, reported to ESMA-regulated trade
+  EU    - EMIR REFIT / MiFID II RTS 22, reported to ESMA-regulated trade
            repositories, deadline T+1.
-  US    — Dodd-Frank Title VII, split between the CFTC (swaps) and SEC
+  US    - Dodd-Frank Title VII, split between the CFTC (swaps) and SEC
            (security-based swaps under Reg SBSR), reporting required "as
-           soon as technologically practicable" — modelled here as same-day.
-  APAC  — Australia's ASIC 2024 Rules, Hong Kong's SFC/HKMA regime, and
+           soon as technologically practicable" - modelled here as same-day.
+  APAC  - Australia's ASIC 2024 Rules, Hong Kong's SFC/HKMA regime, and
            Singapore's MAS rules, which all moved to a harmonised T+2 in
            their 2024–2025 rewrites.
 
@@ -72,7 +72,7 @@ class CounterpartyLEIRule(Rule):
     already agrees on, so this rule doesn't need to branch by jurisdiction.
     """
     rule_id = "LEDGER-003"
-    domain = "Counterparty Identification (Global — ISO 17442)"
+    domain = "Counterparty Identification (Global - ISO 17442)"
     entity_type = "ledger_entry"
 
     def evaluate(self, row: dict) -> RuleResult:
@@ -88,7 +88,7 @@ class CounterpartyLEIRule(Rule):
 class ReportingDeadlineRule(Rule):
     """
     Generalised trade-reporting deadline check. The deadline and the
-    regulatory label applied both depend on the row's `jurisdiction` field —
+    regulatory label applied both depend on the row's `jurisdiction` field -
     this is what makes the rule genuinely cross-border rather than EU-only.
     """
     rule_id = "REPORT-001"
