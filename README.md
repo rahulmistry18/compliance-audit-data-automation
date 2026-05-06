@@ -9,7 +9,9 @@ Proof of concept originally developed at Rennes School of Business (Jun 2023), l
 Live results dashboard: https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/
 (replace `YOUR-GITHUB-USERNAME` after you push; see "Publishing the dashboard" below)
 
-Project explainer (PDF, plain-language, no code): `docs/Project_Explainer.pdf`. Once the dashboard is published it's also available at `https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/Project_Explainer.pdf`.
+Project explainer (PDF, plain-language, no code): `docs/Project_Explainer.pdf`.
+Why these rules exist and who they affect (PDF): `docs/Why_These_Compliance_Rules_Exist.pdf`.
+Once the dashboard is published, both are also available at `https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/Project_Explainer.pdf` and `.../Why_These_Compliance_Rules_Exist.pdf`.
 
 ---
 
