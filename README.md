@@ -11,7 +11,8 @@ Live results dashboard: https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-
 
 Project explainer (PDF, plain-language, no code): `docs/Project_Explainer.pdf`.
 Why these rules exist and who they affect (PDF): `docs/Why_These_Compliance_Rules_Exist.pdf`.
-Once the dashboard is published, both are also available at `https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/Project_Explainer.pdf` and `.../Why_These_Compliance_Rules_Exist.pdf`.
+Setup and deployment guide (PDF, step by step for GitHub, GitHub Pages, Tableau Public, and Power BI): `docs/Setup_and_Deployment_Guide.pdf`.
+Once the dashboard is published, all three are also available at the GitHub Pages URL plus their filename, e.g. `https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/Setup_and_Deployment_Guide.pdf`.
 
 ---
 
