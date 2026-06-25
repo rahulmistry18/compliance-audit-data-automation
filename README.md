@@ -6,13 +6,7 @@ Agentic Python workflow for automated ledger validation and audit quality checks
 
 Proof of concept originally developed at Rennes School of Business (Jun 2023), later extended to cover multiple jurisdictions. All data in this repo is synthetic and generated locally for demonstration purposes; no real client, trade, or mandate data is included.
 
-Live results dashboard: https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/
-(replace `YOUR-GITHUB-USERNAME` after you push; see "Publishing the dashboard" below)
-
-Project explainer (PDF, plain-language, no code): `docs/Project_Explainer.pdf`.
-Why these rules exist and who they affect (PDF): `docs/Why_These_Compliance_Rules_Exist.pdf`.
-Setup and deployment guide (PDF, step by step for GitHub, GitHub Pages, Tableau Public, and Power BI): `docs/Setup_and_Deployment_Guide.pdf`.
-Once the dashboard is published, all three are also available at the GitHub Pages URL plus their filename, e.g. `https://YOUR-GITHUB-USERNAME.github.io/compliance-audit-data-automation/Setup_and_Deployment_Guide.pdf`.
+Live results dashboard: https://rahulmistry18.github.io/compliance-audit-data-automation/
 
 ---
 
@@ -83,7 +77,7 @@ compliance-audit-data-automation/
 ## Getting started
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/rahulmistry18/compliance-audit-data-automation.git
 cd compliance-audit-data-automation
 python -m venv .venv && source .venv/bin/activate   # optional
 pip install -r requirements.txt
@@ -97,7 +91,7 @@ python -m src.main
 # 3. run the test suite
 pytest -v
 
-# 4. (optional) build the Tableau Public / Power BI ready exports
+# 4. build the Tableau Public / Power BI ready exports
 python build_bi_exports.py
 ```
 
@@ -110,7 +104,7 @@ Running `src.main` prints a console summary and writes the audit trail and summa
 1. Push this repo to GitHub.
 2. In the repo, go to Settings, then Pages.
 3. Under "Build and deployment", set Source to "Deploy from a branch", branch `main`, folder `/docs`, then Save.
-4. GitHub publishes it at `https://<your-username>.github.io/<repo-name>/` within a minute or two; that's the link to put on your portfolio.
+4. GitHub publishes it at `https://github.com/rahulmistry18/compliance-audit-data-automation.git` within a minute or two; that's the link to put on your portfolio.
 
 The dashboard currently displays the results from the bundled synthetic sample data. If you re-run the workflow on different data and want the dashboard to reflect it, update the `register` and `escalations` arrays near the bottom of `docs/index.html` with the new figures from `outputs/audit_summary.csv` and `outputs/audit_trail.csv`.
 
@@ -162,7 +156,8 @@ This is a simplified, educational rule set intended to demonstrate the automatio
 
 Python, Pandas, NumPy, pytest. Designed to sit alongside Alteryx-based ETL in a broader audit-data pipeline.
 
-## Author
+## Author 
+Rahul MISTARI
 
 Built by Rahul Mistari.
 
